@@ -2,32 +2,25 @@ import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import TextAndTitle from "./text_title";
 
-export default function PurchasedEBookItem(props) {
+export default function HandoutItem(props) {
   return (
     <View style={{ ...styles.item_view, ...props.style }}>
       <TextAndTitle
-        heading="Book Title:"
-        text={`\t ${props.book_title}`}
-        heading_styles={styles.heading_text}
-        text_styles={styles.text}
-      />
-      <TextAndTitle
-        heading="Author:"
-        text={`\t\t\t ${props.author}`}
+        heading=""
+        text={`${props.course_name}`}
         heading_styles={styles.heading_text}
         text_styles={styles.text}
       />
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-around",
+          justifyContent: "center",
           paddingHorizontal: 10,
           marginTop: 20,
         }}
       >
-        <Image source={require("../assets/pdf_logo.png")} />
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.btn_text}>Download PDF</Text>
+          <Text style={styles.btn_text}>Download</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -49,6 +42,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 15,
     marginStart: 5,
+    flexWrap: "wrap",
+    flexShrink: 1,
   },
   price_text: {
     color: "#8DBA76",

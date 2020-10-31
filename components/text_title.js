@@ -14,5 +14,6 @@ const styles = StyleSheet.create({
   parent: {
     flexDirection: "row",
     margin: 5,
+    paddingEnd: 10,
   },
 });
