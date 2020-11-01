@@ -1,43 +1,54 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, Image, View } from "react-native";
 import LogoText from "../components/logo_text";
 import PasswordField from "../components/password";
 import GreenButton from "../components/button";
 import PasswordResetSuccess from "../components/password_reset_success";
-export default function ResetPassword() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const handleSavePasswordClick = () => {
+
+export default class ResetPassword extends Component {
+  // const [modalVisible, setModalVisible] = useState(false);
+  constructor(props){
+    super(props);
+    this.state={
+      modalVisible: false,
+    }
+  }
+  handleSavePasswordClick = () => {
     // alert("what's good...");
-    setModalVisible(true);
+    // setModalVisible(true);
+    this.setState({modalVisible: true});
     // Don't worry about manually closing the modal
     // We gon navigate to another screen anyway
     setTimeout(() => {
-      setModalVisible(false);
+      this.setState({modalVisible: false});
+      this.props.navigation.navigate("login")
     }, 2000);
   };
-  return (
-    <View style={styles.container}>
-      <PasswordResetSuccess modalVisible={modalVisible} />
-      <StatusBar style="auto" />
-      <View style={styles.back_logo}>
-        <Image source={require("../assets/back.png")} />
-        <View style={styles.logo}>
-          <Image source={require("../assets/logo.png")} />
-          <LogoText />
+  render(){
+    return (
+      <View style={styles.container}>
+        <PasswordResetSuccess modalVisible={this.state.modalVisible} />
+        <StatusBar style="auto" />
+        <View style={styles.back_logo}>
+          <Image source={require("../assets/back.png")} />
+          <View style={styles.logo}>
+            <Image source={require("../assets/logo.png")} />
+            <LogoText />
+          </View>
+          <Text style={styles.reset_password}>Reset Password</Text>
+  
+          <PasswordField placeholder="New Password" />
+          <PasswordField placeholder="Confrim Password" />
+  
+          <GreenButton
+            onHandleClick={this.handleSavePasswordClick}
+            text="Save Password"
+          />
         </View>
-        <Text style={styles.reset_password}>Reset Password</Text>
-
-        <PasswordField placeholder="New Password" />
-        <PasswordField placeholder="Confrim Password" />
-
-        <GreenButton
-          onHandleClick={handleSavePasswordClick}
-          text="Save Password"
-        />
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({

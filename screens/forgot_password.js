@@ -1,36 +1,50 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { StyleSheet, Text, Image, View } from "react-native";
+import React, {Component} from "react";
+import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
 import LogoText from "../components/logo_text";
 import EmailField from "../components/email";
 import GreenButton from "../components/button";
 
-export default function ForgotPassword() {
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <View style={styles.back_logo}>
-        <Image source={require("../assets/back.png")} />
-        <View style={styles.logo}>
-          <Image source={require("../assets/logo.png")} />
-          <LogoText />
-        </View>
-        <Text style={styles.forgot_password}>Forgot Password</Text>
-        <Text style={styles.long_text}>
-          Please Enter Your Email. To Ensure Security of your account, OTP code
-          will be sent to your Email
-        </Text>
-        <EmailField />
-        <GreenButton text="Start Verification" />
-        <View style={styles.register_view}>
-          <Text style={{ alignSelf: "center", color: "#000" }}>
-            Already Have an Account?
+export default class ForgotPassword extends Component {
+  constructor(props){
+    super(props);
+    this.state= {}
+  }
+  onLoginPressed = () =>{
+    this.props.navigation.navigate("login");
+  }
+  onStartVerificationPressed = ()=>{
+    this.props.navigation.navigate("verify")
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <View style={styles.back_logo}>
+          <Image source={require("../assets/back.png")} />
+          <View style={styles.logo}>
+            <Image source={require("../assets/logo.png")} />
+            <LogoText />
+          </View>
+          <Text style={styles.forgot_password}>Forgot Password</Text>
+          <Text style={styles.long_text}>
+            Please Enter Your Email. To Ensure Security of your account, OTP code
+            will be sent to your Email
           </Text>
-          <Text style={{ alignSelf: "center", color: "#5C738B" }}> Login</Text>
+          <EmailField />
+          <GreenButton text="Start Verification" onHandleClick={this.onStartVerificationPressed}/>
+          <View style={styles.register_view}>
+            <Text style={{ alignSelf: "center", color: "#000" }}>
+              Already Have an Account?
+            </Text>
+            <TouchableOpacity onPress={this.onLoginPressed}>
+            <Text style={{ alignSelf: "center", color: "#5C738B" }}> Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({

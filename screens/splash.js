@@ -1,9 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, {Component} from "react";
 import { StyleSheet, ImageBackground, Text, Image, View } from "react-native";
 import LogoText from "../components/logo_text";
 
-export default function Splash() {
+export default class Splash extends Component {
+  constructor(props){
+    super(props)
+    this.state ={
+      isLoading: true,
+    }
+  }
+  componentDidMount(){
+    setTimeout(()=>{
+      this.setState({isLoading: false})
+      this.props.navigation.navigate("login");
+    }, 3000)
+  }
+render(){
   return (
     <ImageBackground
       style={{ flex: 1 }}
@@ -16,6 +29,7 @@ export default function Splash() {
       </View>
     </ImageBackground>
   );
+}
 }
 
 const styles = StyleSheet.create({

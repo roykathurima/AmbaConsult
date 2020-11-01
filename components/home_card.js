@@ -3,7 +3,7 @@ import { StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 
 export default function HomeCard(props) {
   return (
-    <TouchableOpacity elevation={5} style={styles.card_view}>
+    <TouchableOpacity style={styles.card_view} onPress={props.onHandlePress}>
       <Text style={styles.card_text}>{props.text}</Text>
       <Image source={props.img_url} />
     </TouchableOpacity>
@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     margin: 20,
     padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5,
   },
   card_text: {
     color: "#33373E",

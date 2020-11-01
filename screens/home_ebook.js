@@ -1,40 +1,47 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, {Component} from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import HomeSkeleton from "../components/home_skeleton";
 import EBookItem from "../components/ebook_item";
 
-export default function HomeEBooks() {
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <HomeSkeleton
-        title="E-Books"
-        img_url={require("../assets/big_ebooks.png")}
-        image_styles={{ width: 154, height: 132 }}
-        main_styles={styles.main_stylez}
-        title_styles={styles.ebooks}
-      >
-        <ScrollView>
-          <EBookItem
-            book_title="Introduction to Health and Social Care"
-            author="Richard Newmann"
-            price="$30"
-          />
-          <EBookItem
-            book_title="Introduction to Health and Social Care"
-            author="Gary Newmann"
-            price="$30"
-          />
-          <EBookItem
-            book_title="Introduction to Health and Social Care"
-            author="Richard Newmann"
-            price="$50"
-          />
-        </ScrollView>
-      </HomeSkeleton>
-    </View>
-  );
+export default class HomeEBooks extends Component {
+  constructor(props){
+    super(props);
+    this.state={}
+  }
+  
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <HomeSkeleton
+          title="E-Books"
+          img_url={require("../assets/big_ebooks.png")}
+          image_styles={{ width: 154, height: 132 }}
+          main_styles={styles.main_stylez}
+          title_styles={styles.ebooks}
+        >
+          <ScrollView>
+            <EBookItem
+              book_title="Introduction to Health and Social Care"
+              author="Richard Newmann"
+              price="$30"
+            />
+            <EBookItem
+              book_title="Introduction to Health and Social Care"
+              author="Gary Newmann"
+              price="$30"
+            />
+            <EBookItem
+              book_title="Introduction to Health and Social Care"
+              author="Richard Newmann"
+              price="$50"
+            />
+          </ScrollView>
+        </HomeSkeleton>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
