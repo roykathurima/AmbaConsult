@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, Image, View, TextInput } from "react-native";
+import { StyleSheet, Image, View, TextInput, Text } from "react-native";
 
 export default function PhoneInput(props) {
   return (
     <View style={styles.input_view}>
-      <TextInput style={{ width: "12%" }} placeholder={props.pretext} />
-      <Image style={styles.drop_down} source={require("../assets/drop.png")} />
+      <Text style={{ width: "12%", paddingTop:5, color:"grey" }}>{props.pretext}</Text>
+      {/* <Image style={styles.drop_down} source={require("../assets/drop.png")} /> */}
       <Image
         style={styles.vertical_bar}
         source={require("../assets/vertical_bar.png")}
@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
   },
   vertical_bar: {
     marginVertical: 5,
-    marginHorizontal: 20,
+    marginEnd: 10,
   },
 });

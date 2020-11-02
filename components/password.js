@@ -8,7 +8,7 @@ export default function PasswordField(props) {
         style={{ marginTop: 2, marginStart: 3, marginEnd: 7 }}
         source={require("../assets/padlock.png")}
       />
-      <TextInput style={{ width: "100%" }} placeholder={props.placeholder} />
+      <TextInput secureTextEntry={true} style={{ width: "100%" }} placeholder={props.placeholder} />
       <Image
         style={styles.password_eye}
         source={require("../assets/macho.png")}
