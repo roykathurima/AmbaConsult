@@ -8,17 +8,18 @@ export default class LandingPage extends Component {
     super(props);
     this.state={}
   }
+  // You will however need to check to see if the individual is logged prior to navigating
   onBusinessConsultingPressed=()=>{
-    this.props.navigation.navigate("business_stack");
+    this.props.navigation.navigate("home_stack", {intended_screen: "business"});
   }
   onCoursesListPressed=()=>{
-    this.props.navigation.navigate("courses_stack");
+    this.props.navigation.navigate("home_stack", {intended_screen: "courses"});
   }
   onWorkshopsPressed=()=>{
-    this.props.navigation.navigate("workshop_stack");
+    this.props.navigation.navigate("home_stack", {intended_screen: "workshops"});
   }
   onEBooksPressed=()=>{
-    this.props.navigation.navigate("ebook_stack");
+    this.props.navigation.navigate("home_stack", {intended_screen: "ebooks"});
   }
   render(){
     return (

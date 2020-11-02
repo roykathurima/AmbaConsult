@@ -23,7 +23,7 @@ export default class BusinessConsulting extends Component {
           main_styles={styles.main_stylez}
           title_styles={styles.consulting}
         >
-          <ScrollView style={{ marginBottom: 40 }}>
+          <ScrollView style={{ marginBottom: 138 }}>
             <Text style={styles.main_text}>
               Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
               nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam

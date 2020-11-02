@@ -23,7 +23,7 @@ export default function EBookItem(props) {
         heading_styles={styles.heading_text}
         text_styles={styles.price_text}
       />
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={props.onHandlePress}>
         <Text style={styles.btn_text}>Purchase</Text>
       </TouchableOpacity>
     </View>

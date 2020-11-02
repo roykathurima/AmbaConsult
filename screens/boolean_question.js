@@ -1,27 +1,36 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, {Component} from "react";
 import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
 import CheckAnswer from "../components/check_answers";
 
-export default function BooleanQuestion() {
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <View style={styles.back_logo}>
-        <Image source={require("../assets/back.png")} />
-        <Text style={styles.timer}>00:30</Text>
+export default class BooleanQuestion extends Component {
+  constructor(props){
+    super(props);
+    this.state={}
+  }
+  onFinishPressed = ()=>{
+    this.props.navigation.navigate("exams");
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <View style={styles.back_logo}>
+          <Image source={require("../assets/back.png")} />
+          <Text style={styles.timer}>00:30</Text>
+        </View>
+        <Text style={styles.question_text}>
+          Q3. Which of the following is NOT a care certificate standard?
+        </Text>
+        <CheckAnswer choice="True" />
+        <CheckAnswer choice="False" />
+        <TouchableOpacity style={styles.next_container} onPress={this.onFinishPressed}>
+          <Text style={styles.next}>Finish</Text>
+          <Image source={require("../assets/arrow.png")} />
+        </TouchableOpacity>
       </View>
-      <Text style={styles.question_text}>
-        Q3. Which of the following is NOT a care certificate standard?
-      </Text>
-      <CheckAnswer choice="True" />
-      <CheckAnswer choice="False" />
-      <TouchableOpacity style={styles.next_container}>
-        <Text style={styles.next}>Finish</Text>
-        <Image source={require("../assets/arrow.png")} />
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({

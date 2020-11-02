@@ -1,39 +1,51 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, {Component} from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import HomeSkeleton from "../components/home_skeleton";
 import SearchInput from "../components/search_input";
 import CourseItem from "../components/course_item";
 
-export default function HomeCoursesList() {
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <HomeSkeleton
-        title="Courses List"
-        img_url={require("../assets/big_courses.png")}
-        image_styles={{ width: 171, height: 172 }}
-        main_styles={styles.main_stylez}
-        title_styles={styles.courses}
-      >
-        <SearchInput placeholder="Search Courses" />
-        <ScrollView style={{ marginBottom: 30, marginTop: 10 }}>
-          <CourseItem
-            title="Core Certificate"
-            img_url={require("../assets/course_image.png")}
-          />
-          <CourseItem
-            title="Lifestyle Workshop"
-            img_url={require("../assets/course_image1.png")}
-          />
-          <CourseItem
-            title="Train the Trainer"
-            img_url={require("../assets/course_image2.png")}
-          />
-        </ScrollView>
-      </HomeSkeleton>
-    </View>
-  );
+export default class HomeCoursesList extends Component {
+  constructor(props){
+    super(props);
+    this.state={}
+  }
+  onViewPressed = ()=>{
+    this.props.navigation.navigate("course_detail")
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <HomeSkeleton
+          title="Courses List"
+          img_url={require("../assets/big_courses.png")}
+          image_styles={{ width: 171, height: 172 }}
+          main_styles={styles.main_stylez}
+          title_styles={styles.courses}
+        >
+          <SearchInput placeholder="Search Courses" />
+          <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>
+            <CourseItem
+              title="Core Certificate"
+              img_url={require("../assets/course_image.png")}
+              onHandlePress={this.onViewPressed}
+            />
+            <CourseItem
+              title="Lifestyle Workshop"
+              img_url={require("../assets/course_image1.png")}
+              onHandlePress={this.onViewPressed}
+            />
+            <CourseItem
+              title="Train the Trainer"
+              img_url={require("../assets/course_image2.png")}
+              onHandlePress={this.onViewPressed}
+            />
+          </ScrollView>
+        </HomeSkeleton>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

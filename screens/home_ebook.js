@@ -10,6 +10,9 @@ export default class HomeEBooks extends Component {
     this.state={}
   }
   
+  onPurchasePressed=()=>{
+    this.props.navigation.navigate("payment", {from:"ebooks"});
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -26,16 +29,19 @@ export default class HomeEBooks extends Component {
               book_title="Introduction to Health and Social Care"
               author="Richard Newmann"
               price="$30"
+              onHandlePress={this.onPurchasePressed}
             />
             <EBookItem
               book_title="Introduction to Health and Social Care"
               author="Gary Newmann"
               price="$30"
+              onHandlePress={this.onPurchasePressed}
             />
             <EBookItem
               book_title="Introduction to Health and Social Care"
               author="Richard Newmann"
               price="$50"
+              onHandlePress={this.onPurchasePressed}
             />
           </ScrollView>
         </HomeSkeleton>

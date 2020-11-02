@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, ImageBackground, Text } from "react-native";
+import { StyleSheet, View, ImageBackground, Text, TouchableOpacity } from "react-native";
 
 export default function CourseItem(props) {
   return (
@@ -34,7 +34,9 @@ export default function CourseItem(props) {
           }}
         >
           <Text style={styles.title_text}>{props.title}</Text>
+          <TouchableOpacity onPress={props.onHandlePress}>
           <Text style={styles.view_text}>{props.button_title || "View"}</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>

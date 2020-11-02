@@ -1,14 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, Image, View, TextInput } from "react-native";
+import { StyleSheet, Text, Image, View } from "react-native";
 import LogoText from "../components/logo_text";
 import AmbaInput from "../components/amba_input";
 import GreenButton from "../components/button";
 import MultiLineInput from "../components/multiline_input";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function ContactForm() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.back_logo}>
         <Image source={require("../assets/back.png")} />
@@ -24,7 +25,7 @@ export default function ContactForm() {
         <MultiLineInput placeholder="Enter Your Message Here..." />
         <GreenButton text="Send Message" />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -32,7 +33,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F3F3F3",
-    paddingTop: 20,
+    paddingVertical: 20,
+    marginBottom:1,
   },
   back_logo: {
     margin: 20,

@@ -11,7 +11,7 @@ export default function WorkshopItem(props) {
   //   rand = 1;
 
   return (
-    <TouchableOpacity style={rand ? styles.touchable : styles.alt_touchable}>
+    <TouchableOpacity onPress={props.onHandlePress} style={rand ? styles.touchable : styles.alt_touchable}>
       <ImageBackground
         style={styles.workshop_item}
         source={

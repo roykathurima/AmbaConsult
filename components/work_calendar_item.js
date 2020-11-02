@@ -31,10 +31,10 @@ export default function WorkshopCalendarItem(props) {
           marginTop: 10,
         }}
       >
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={props.onHandleVDPress} style={styles.button}>
           <Text style={styles.btn_text}>View Details</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={props.onHandleBookPress} style={styles.button}>
           <Text style={styles.btn_text}>Book</Text>
         </TouchableOpacity>
       </View>

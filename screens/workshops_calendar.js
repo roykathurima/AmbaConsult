@@ -1,39 +1,57 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, {Component} from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import SecondarySkeleton from "../components/secondary_skeleton";
 import WorkshopCalendarItem from "../components/work_calendar_item";
 
-export default function WorkshopsCalendar() {
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <SecondarySkeleton
-        title="Workshops Calendar"
-        main_styles={styles.main_stylez}
-        title_styles={styles.work_calendar}
-        calendar_visible={true}
-      >
-        <ScrollView>
-          <WorkshopCalendarItem
-            title="Introduction to Health and Social Care"
-            date="23rd July 2020"
-            venue="Heart of England Conference"
-          />
-          <WorkshopCalendarItem
-            title="Introduction to Health and Social Care"
-            date="23rd September 2020"
-            venue="Heart of England Conference"
-          />
-          <WorkshopCalendarItem
-            title="Introduction to Health and Social Care"
-            date="13th November 2020"
-            venue="Heart of England Conference"
-          />
-        </ScrollView>
-      </SecondarySkeleton>
-    </View>
-  );
+export default class WorkshopsCalendar extends Component {
+  constructor(props){
+    super(props);
+    this.state={}
+  }
+  onViewDetailsPressed=()=>{
+    this.props.navigation.navigate("workshop_details");
+  }
+  onBookPressed=()=>{
+    this.props.navigation.navigate("payment", {from: "workshops"});
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <SecondarySkeleton
+          title="Workshops Calendar"
+          main_styles={styles.main_stylez}
+          title_styles={styles.work_calendar}
+          calendar_visible={true}
+        >
+          <ScrollView>
+            <WorkshopCalendarItem 
+              title="Introduction to Health and Social Care"
+              date="23rd July 2020"
+              venue="Heart of England Conference"
+              onHandleVDPress={this.onViewDetailsPressed}
+              onHandleBookPress={this.onBookPressed}
+            />
+            <WorkshopCalendarItem
+              title="Introduction to Health and Social Care"
+              date="23rd September 2020"
+              venue="Heart of England Conference"
+              onHandleVDPress={this.onViewDetailsPressed}
+              onHandleBookPress={this.onBookPressed}
+            />
+            <WorkshopCalendarItem
+              title="Introduction to Health and Social Care"
+              date="13th November 2020"
+              venue="Heart of England Conference"
+              onHandleVDPress={this.onViewDetailsPressed}
+              onHandleBookPress={this.onBookPressed}
+            />
+          </ScrollView>
+        </SecondarySkeleton>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

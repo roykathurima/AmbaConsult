@@ -15,6 +15,7 @@ import CountryInput from "../components/country";
 import PhoneInput from "../components/phone_input";
 
 export default function CreateAccount() {
+  const country_api_url = "https://restcountries.eu/rest/v2/all"
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
