@@ -4,6 +4,7 @@ import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
 import LogoText from "../components/logo_text";
 import EmailField from "../components/email";
 import GreenButton from "../components/button";
+import AmbaIndicator from "../components/amba_indicator"
 
 export default class ForgotPassword extends Component {
   constructor(props){
@@ -19,7 +20,9 @@ export default class ForgotPassword extends Component {
   render(){
     return (
       <View style={styles.container}>
+        
         <StatusBar style="auto" />
+        
         <View style={styles.back_logo}>
           <Image source={require("../assets/back.png")} />
           <View style={styles.logo}>
@@ -33,6 +36,7 @@ export default class ForgotPassword extends Component {
           </Text>
           <EmailField />
           <GreenButton text="Start Verification" onHandleClick={this.onStartVerificationPressed}/>
+          
           <View style={styles.register_view}>
             <Text style={{ alignSelf: "center", color: "#000" }}>
               Already Have an Account?
@@ -80,4 +84,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
+  spinnerTextStyle:{
+    color:"red"
+  }
 });

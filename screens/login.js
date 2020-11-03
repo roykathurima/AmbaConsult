@@ -5,14 +5,32 @@ import LogoText from "../components/logo_text";
 import EmailField from "../components/email";
 import PasswordField from "../components/password";
 import GreenButton from "../components/button";
+import firebase from "firebase";
+import AmbaIndicator from "../components/amba_indicator"
 
 export default class Login extends Component {
   constructor(props){
     super(props)
-    this.state= {}
+    this.state= {
+      email: "",
+      password: "",
+      loading: false,
+    }
   }
   onLoginPressed=()=>{
-    this.props.navigation.navigate("home");
+    this.setState({email:"", password:"", loading:true})
+    // setTimeout(()=>{
+    //   this.setState({loading:false})
+    // }, 5000)
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+    .then((value)=>{
+      this.setState({loading:false})
+      this.props.navigation.navigate("home");
+    })
+    .catch((error)=>{
+      this.setState({loading:false})
+      alert("Unable to Log you in...")
+    })
   }
 
   onForgotPasswordPressed = ()=>{
@@ -33,8 +51,8 @@ export default class Login extends Component {
           </View>
           <Text style={styles.please_login}>Please Login</Text>
   
-          <EmailField />
-          <PasswordField placeholder="Password" />
+          <EmailField onHandleTextChange={(text)=>{this.setState({email:text})}} />
+          <PasswordField placeholder="Password" onHandleTextChange={(text)=>{this.setState({password:text})}} />
           <TouchableOpacity onPress={this.onForgotPasswordPressed} style={{paddingVertical: 10, paddingStart: 10}}>
           <Text
             style={{ alignSelf: "flex-end", color: "#5C738B" }}
@@ -52,6 +70,7 @@ export default class Login extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        {this.state.loading?<AmbaIndicator />:null}
       </View>
     );
   }

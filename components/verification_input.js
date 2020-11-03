@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 
-export default function VerificationInput() {
+export default function VerificationInput(props) {
   return (
     <TextInput
       style={{
@@ -12,6 +12,9 @@ export default function VerificationInput() {
         marginHorizontal: 10,
         textAlign: "center",
       }}
+      onSubmitEditing={props.submit_edit}
+      maxLength={1}
+      returnKeyType={"next"}
     />
   );
 }

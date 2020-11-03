@@ -10,7 +10,7 @@ export default function PhoneInput(props) {
         style={styles.vertical_bar}
         source={require("../assets/vertical_bar.png")}
       />
-      <TextInput style={{ width: "70%" }} placeholder={props.posttext} />
+      <TextInput onChangeText={props.onHandleTextChange} style={{ width: "70%" }} placeholder={props.posttext} />
     </View>
   );
 }

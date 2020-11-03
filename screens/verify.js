@@ -1,9 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, Text, Image, View, ImageBackground } from "react-native";
-import VerificationInput from "../components/verification_input";
+import { StyleSheet, Text, Image, View, ImageBackground, TextInput } from "react-native";
 import GreenButton from "../components/button";
 import VerifyingModal from "../components/verifying_modal";
+import firebase from "firebase"
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 
 export default class Verify extends Component {
   // const [modalVisible, setModalVisible] = useState(false);
@@ -11,23 +12,53 @@ export default class Verify extends Component {
     super(props);
     this.state={
       modalVisible: false,
+      phone:"+254711836533",
+      confirmResults: {},
+      enteredCode: ""
     }
+    this.recaptchaVerifier = React.createRef();
+    this.firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
   }
+  componentDidMount(){
+    firebase.auth()
+    .signInWithPhoneNumber("+254711836533", this.recaptchaVerifier.current)
+    .then(confirmResult=>{
+      this.setState({confirmResults: confirmResult})
+    })
+    .catch(error=>{
+      // alert(error.message + "\n Something Went Wrong...")
+      console.log(error.message)
+    })
+  // try {
+  //   firebase.auth.PhoneAuthProvider()
+  //   .verifyPhoneNumber(
+  //     this.state.phone,
+  //     recaptchaVerifier.current
+  //   ).then(value=>{alert("you might have just got it")})
+   
+  // } catch (err) {
+  //   alert(err)
+  // }
+}
+  
   onHandleVerifyPress = () => {
     // alert("whats good");
     // setModalVisible(true);
-    this.setState({modalVisible: true})
-    // Don't worry about manually closing the modal
-    // We gon navigate to another screen anyway
-    setTimeout(() => {
-      this.setState({modalVisible: false})
-      this.props.navigation.navigate("reset_password")
-    }, 2000);
+    // this.setState({modalVisible: true})
+    // verify the user before navigating onto another screen...
+    this.state.confirmResults.confirm(this.state.enteredCode)
+    .then((user)=>{console.log(user)})
+    // setTimeout(() => {
+    //   this.setState({modalVisible: false})
+    //   this.props.navigation.navigate("reset_password")
+    // }, 2000);
   };
+
   render(){
     return (
       <View style={styles.container}>
         <VerifyingModal modalVisible={this.state.modalVisible} />
+        <FirebaseRecaptchaVerifierModal ref={this.recaptchaVerifier} firebaseConfig={this.firebaseConfig} />
         <StatusBar style="auto" />
         <ImageBackground
           style={{
@@ -45,15 +76,56 @@ export default class Verify extends Component {
           <Image source={require("../assets/verify.png")} />
           <Text style={styles.verification_text}>Verification</Text>
           <Text style={styles.instructions_text}>
-            Enter a 6 Digit Number that We Sent To Your Email
+            Enter a 6 Digit Number that We Sent To Your Phone
           </Text>
           <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-            <VerificationInput />
-            <VerificationInput />
-            <VerificationInput />
-            <VerificationInput />
-            <VerificationInput />
-            <VerificationInput />
+          <TextInput
+      style={styles.verification_input}
+      maxLength={1}
+      returnKeyType={"next"}
+      autoFocus={true}
+      ref={(input) => { this.firstTextInput = input; }}
+      onSubmitEditing={() => { this.secondTextInput.focus(); }}
+      onChangeText={(text)=>this.state.enteredCode=text}
+    />
+          <TextInput
+      style={styles.verification_input}
+      maxLength={1}
+      returnKeyType={"next"}
+      ref={(input) => { this.secondTextInput = input; }}
+      onSubmitEditing={() => { this.thirdTextInput.focus(); }}
+      onChangeText={(text)=>this.state.enteredCode+=text}
+    />
+          <TextInput
+      style={styles.verification_input}
+      maxLength={1}
+      returnKeyType={"next"}
+      ref={(input) => { this.thirdTextInput = input; }}
+      onSubmitEditing={() => { this.fourthTextInput.focus(); }}
+      onChangeText={(text)=>this.state.enteredCode+=text}
+    />
+          <TextInput
+      style={styles.verification_input}
+      maxLength={1}
+      returnKeyType={"next"}
+      ref={(input) => { this.fourthTextInput = input; }}
+      onSubmitEditing={() => { this.fifthTextInput.focus(); }}
+      onChangeText={(text)=>this.state.enteredCode+=text}
+    />
+          <TextInput
+      style={styles.verification_input}
+      maxLength={1}
+      returnKeyType={"next"}
+      ref={(input) => { this.fifthTextInput = input; }}
+      onSubmitEditing={() => { this.lastTextInput.focus(); }}
+      onChangeText={(text)=>this.state.enteredCode+=text}
+    />
+          <TextInput
+      style={styles.verification_input}
+      maxLength={1}
+      ref={(input) => { this.lastTextInput = input; }}
+      onChangeText={(text)=>this.state.enteredCode+=text}
+    />
           </View>
           <GreenButton
             style={{ width: "90%", marginTop: 70 }}
@@ -100,4 +172,12 @@ const styles = StyleSheet.create({
     color: "#8DBA76",
     textDecorationLine: "underline",
   },
+  verification_input:{
+    borderBottomColor: "#547C36",
+    borderBottomWidth: 2,
+    width: "10%",
+    marginVertical: 30,
+    marginHorizontal: 10,
+    textAlign: "center",
+  }
 });

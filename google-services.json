@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "567297178348",
+    "firebase_url": "https://ambaconsult.firebaseio.com",
+    "project_id": "ambaconsult",
+    "storage_bucket": "ambaconsult.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567297178348:android:b3af919c96895acb66c3c9",
+        "android_client_info": {
+          "package_name": "com.ambaconsult.uk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567297178348-hfevp5n87tno2b8rujgevud29911jpp9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgpBju44-VBKPEyr9kjrvgC3EKOO0u6dY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567297178348-hfevp5n87tno2b8rujgevud29911jpp9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
