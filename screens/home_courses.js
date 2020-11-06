@@ -13,6 +13,9 @@ export default class HomeCoursesList extends Component {
   onViewPressed = ()=>{
     this.props.navigation.navigate("course_detail")
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -23,6 +26,7 @@ export default class HomeCoursesList extends Component {
           image_styles={{ width: 171, height: 172 }}
           main_styles={styles.main_stylez}
           title_styles={styles.courses}
+          nav={this.onBackPressed}
         >
           <SearchInput placeholder="Search Courses" />
           <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>

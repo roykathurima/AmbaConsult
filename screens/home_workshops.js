@@ -13,6 +13,9 @@ export default class HomeWorkshops extends Component {
   onWorkShopItemPressed = ()=>{
     this.props.navigation.navigate("workshop_calendar")
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -23,6 +26,7 @@ export default class HomeWorkshops extends Component {
           image_styles={styles.big_workshop}
           main_styles={styles.main_body}
           title_styles={styles.workshops}
+          nav={this.onBackPressed}
         >
           <ScrollView>
             <WorkshopItem onHandlePress={this.onWorkShopItemPressed} title="Wisdom Lifestyle" />

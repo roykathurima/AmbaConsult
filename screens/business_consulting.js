@@ -12,6 +12,9 @@ export default class BusinessConsulting extends Component {
   onContactUsPressed=()=>{
     this.props.navigation.navigate("contact_form");
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -22,6 +25,7 @@ export default class BusinessConsulting extends Component {
           image_styles={{ width: 194, height: 146 }}
           main_styles={styles.main_stylez}
           title_styles={styles.consulting}
+          nav={this.onBackPressed}
         >
           <ScrollView style={{ marginBottom: 138 }}>
             <Text style={styles.main_text}>

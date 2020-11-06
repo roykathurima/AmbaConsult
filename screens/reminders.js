@@ -13,11 +13,14 @@ export default class Reminders extends Component {
     this.props.navigation.navigate("exam_stack")
   }
   onWorkshopsPressed=()=>{}
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
-        <AccountHeadBanner title="Reminders" />
+        <AccountHeadBanner title="Reminders" nav={this.onBackPressed} />
         <View style={{ marginTop: 30 }}>
           <WorkshopItem onHandlePress={this.onExamsPressed} title="Exams" />
           <WorkshopItem onHandlePress={this.onWorkshopsPressed} title="Workshops" />

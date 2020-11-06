@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, Text, Image, View, ImageBackground, TextInput } from "react-native";
+import { StyleSheet, Text, Image, View, ImageBackground, TouchableOpacity, TextInput } from "react-native";
 import GreenButton from "../components/button";
 import VerifyingModal from "../components/verifying_modal";
 import firebase from "firebase"
@@ -12,7 +12,6 @@ export default class Verify extends Component {
     super(props);
     this.state={
       modalVisible: false,
-      phone:"+254711836533",
       confirmResults: {},
       enteredCode: ""
     }
@@ -20,40 +19,39 @@ export default class Verify extends Component {
     this.firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
   }
   componentDidMount(){
+    const {email, phone} = this.props.route.params
+    // alert(`Email: ${email} \n Phone: ${phone}`)
     firebase.auth()
-    .signInWithPhoneNumber("+254711836533", this.recaptchaVerifier.current)
+    .signInWithPhoneNumber(phone, this.recaptchaVerifier.current)
     .then(confirmResult=>{
       this.setState({confirmResults: confirmResult})
     })
     .catch(error=>{
-      // alert(error.message + "\n Something Went Wrong...")
       console.log(error.message)
     })
-  // try {
-  //   firebase.auth.PhoneAuthProvider()
-  //   .verifyPhoneNumber(
-  //     this.state.phone,
-  //     recaptchaVerifier.current
-  //   ).then(value=>{alert("you might have just got it")})
-   
-  // } catch (err) {
-  //   alert(err)
-  // }
 }
   
   onHandleVerifyPress = () => {
-    // alert("whats good");
-    // setModalVisible(true);
-    // this.setState({modalVisible: true})
+    this.setState({modalVisible: true})
     // verify the user before navigating onto another screen...
+
     this.state.confirmResults.confirm(this.state.enteredCode)
-    .then((user)=>{console.log(user)})
+    .then((user)=>{
+      console.log(user)
+      if(user != null && user !=undefined){
+        this.setState({modalVisible: false})
+        this.props.navigation.navigate("reset_password", {user: user.user});
+      }
+    })
+
     // setTimeout(() => {
     //   this.setState({modalVisible: false})
-    //   this.props.navigation.navigate("reset_password")
+      // this.props.navigation.navigate("reset_password")
     // }, 2000);
   };
-
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -68,9 +66,9 @@ export default class Verify extends Component {
           }}
           source={require("../assets/verify_ellipse.png")}
         >
-          <View style={styles.back_logo}>
+          <TouchableOpacity style={styles.back_logo} onPress={this.onBackPressed}>
             <Image source={require("../assets/back.png")} />
-          </View>
+          </TouchableOpacity>
         </ImageBackground>
         <View style={styles.content}>
           <Image source={require("../assets/verify.png")} />

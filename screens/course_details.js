@@ -12,6 +12,9 @@ export default class CourseDetails extends Component {
   onEnrollPressed = ()=>{
     this.props.navigation.navigate("payment", {from:"course"});
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -22,6 +25,7 @@ export default class CourseDetails extends Component {
           image_styles={{ width: 171, height: 172 }}
           main_styles={styles.main_stylez}
           title_styles={styles.courses}
+          nav={this.onBackPressed}
         >
           <ScrollView>
             <Text style={styles.main_text}>

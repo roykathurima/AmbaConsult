@@ -1,10 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
 export default function PlainHeader(props) {
   return (
     <View style={styles.back_logo}>
+      <TouchableOpacity onPress={props.nav}>
       <Image source={require("../assets/back.png")} />
+      </TouchableOpacity>
       <Text style={styles.title_text}>{props.title}</Text>
     </View>
   );

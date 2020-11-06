@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, Image, View, ImageBackground } from "react-native";
+import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
 import LogoText from "./logo_text";
 import Calendar from "../components/calendar";
 
@@ -7,7 +7,9 @@ export default function SecondarySkeleton(props) {
   return (
     <View style={styles.container}>
       <View style={styles.back_logo}>
+        <TouchableOpacity onPress={props.nav}>
         <Image source={require("../assets/back.png")} />
+        </TouchableOpacity>
         <View style={styles.logo}>
           <Image source={require("../assets/logo.png")} />
           <LogoText />

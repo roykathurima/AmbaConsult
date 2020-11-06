@@ -12,6 +12,9 @@ export default class Exams extends Component {
   onTakeTestPressed = ()=>{
     this.props.navigation.navigate("multiple_choice_question")
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -26,7 +29,7 @@ export default class Exams extends Component {
           }}
           source={require("../assets/elipse_decor.png")}
         />
-        <PlainHeader title="Exams Due" />
+        <PlainHeader title="Exams Due" nav={this.onBackPressed} />
         <View style={{ marginHorizontal: 10 }}>
           <SearchInput placeholder="Search Exams" />
           <ScrollView style={{ marginBottom: 130 }}>

@@ -6,6 +6,7 @@ import {
   Image,
   View,
   ScrollView,
+  TouchableOpacity,
   SafeAreaView,
 } from "react-native";
 import LogoText from "../components/logo_text";
@@ -67,6 +68,7 @@ export default class CreateAccount extends Component {
     if(this.state.password.length<6){
       alert("password should be at least 6 characters long")
     }
+    // You should also add a check to ensure that the email address is unique
     let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if(!this.state.email.match(mailformat) || this.state.email < 8){
       alert("please Enter a valid email address")
@@ -113,14 +115,18 @@ export default class CreateAccount extends Component {
     })
     .catch((error)=>{console.log(error)});
   }
-
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <StatusBar style="auto" />
           <View style={styles.back_logo}>
+            <TouchableOpacity onPress={this.onBackPressed}>
             <Image source={require("../assets/back.png")} />
+            </TouchableOpacity>
             <View style={styles.logo}>
               <Image source={require("../assets/logo.png")} />
               <LogoText />

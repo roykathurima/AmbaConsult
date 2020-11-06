@@ -13,6 +13,9 @@ export default class HomeEBooks extends Component {
   onPurchasePressed=()=>{
     this.props.navigation.navigate("payment", {from:"ebooks"});
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -23,6 +26,7 @@ export default class HomeEBooks extends Component {
           image_styles={{ width: 154, height: 132 }}
           main_styles={styles.main_stylez}
           title_styles={styles.ebooks}
+          nav={this.onBackPressed}
         >
           <ScrollView>
             <EBookItem

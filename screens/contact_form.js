@@ -1,32 +1,43 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { StyleSheet, Text, Image, View } from "react-native";
+import React, {Component} from "react";
+import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
 import LogoText from "../components/logo_text";
 import AmbaInput from "../components/amba_input";
 import GreenButton from "../components/button";
 import MultiLineInput from "../components/multiline_input";
 import { ScrollView } from "react-native-gesture-handler";
 
-export default function ContactForm() {
-  return (
-    <ScrollView style={styles.container}>
-      <StatusBar style="auto" />
-      <View style={styles.back_logo}>
-        <Image source={require("../assets/back.png")} />
-        <View style={styles.logo}>
-          <Image source={require("../assets/logo.png")} />
-          <LogoText />
+export default class ContactForm extends Component {
+  constructor(props){
+    super(props);
+    this.state={}
+  }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
+  render(){
+    return (
+      <ScrollView style={styles.container}>
+        <StatusBar style="auto" />
+        <View style={styles.back_logo}>
+          <TouchableOpacity onPress={this.onBackPressed}>
+          <Image source={require("../assets/back.png")} />
+          </TouchableOpacity>
+          <View style={styles.logo}>
+            <Image source={require("../assets/logo.png")} />
+            <LogoText />
+          </View>
+          <Text style={styles.contact_us}>Contact Us</Text>
+          <AmbaInput placeholder="Your First Name" />
+          <AmbaInput placeholder="Your Email" />
+          <AmbaInput placeholder="Organization" />
+          <AmbaInput placeholder="Subject" />
+          <MultiLineInput placeholder="Enter Your Message Here..." />
+          <GreenButton text="Send Message" />
         </View>
-        <Text style={styles.contact_us}>Contact Us</Text>
-        <AmbaInput placeholder="Your First Name" />
-        <AmbaInput placeholder="Your Email" />
-        <AmbaInput placeholder="Organization" />
-        <AmbaInput placeholder="Subject" />
-        <MultiLineInput placeholder="Enter Your Message Here..." />
-        <GreenButton text="Send Message" />
-      </View>
-    </ScrollView>
-  );
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

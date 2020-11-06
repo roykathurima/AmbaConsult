@@ -7,29 +7,36 @@ import PasswordField from "../components/password";
 import GreenButton from "../components/button";
 import firebase from "firebase";
 import AmbaIndicator from "../components/amba_indicator"
+import FirebaseConfig from "../constants/api_keys"
 
 export default class Login extends Component {
   constructor(props){
     super(props)
     this.state= {
-      email: "",
-      password: "",
+      email: "kathurimaroy@gmail.com",
+      password: "Constantine",
       loading: false,
+    }
+    if(!firebase.apps.length){
+      firebase.initializeApp(FirebaseConfig);
     }
   }
   onLoginPressed=()=>{
-    this.setState({email:"", password:"", loading:true})
+    this.setState({loading:true})
     // setTimeout(()=>{
     //   this.setState({loading:false})
     // }, 5000)
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
     .then((value)=>{
+      console.log(value)
       this.setState({loading:false})
       this.props.navigation.navigate("home");
+      this.setState({email:"", password:""})
     })
     .catch((error)=>{
       this.setState({loading:false})
-      alert("Unable to Log you in...")
+      alert(error.message)
+      // alert("Login Failed")
     })
   }
 
@@ -39,12 +46,17 @@ export default class Login extends Component {
   onRegisterPressed = () =>{
     this.props.navigation.navigate("register")
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.back_logo}>
+          <TouchableOpacity onPress={this.onBackPressed}>
           <Image source={require("../assets/back.png")} />
+          </TouchableOpacity>
           <View style={styles.logo}>
             <Image source={require("../assets/logo.png")} />
             <LogoText />

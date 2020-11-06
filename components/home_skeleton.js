@@ -1,12 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, Image, View, ImageBackground } from "react-native";
+import { StyleSheet, Text, Image, View, ImageBackground, TouchableOpacity } from "react-native";
 
 export default function HomeSkeleton(props) {
   return (
     <View style={styles.container}>
       <View style={styles.back_logo}>
+        <TouchableOpacity onPress={props.nav}>
         <Image source={require("../assets/back.png")} />
-
+        </TouchableOpacity>
         <Text style={props.title_styles}>{props.title}</Text>
         <ImageBackground
           style={props.image_styles}

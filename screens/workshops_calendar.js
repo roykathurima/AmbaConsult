@@ -15,6 +15,9 @@ export default class WorkshopsCalendar extends Component {
   onBookPressed=()=>{
     this.props.navigation.navigate("payment", {from: "workshops"});
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -24,6 +27,7 @@ export default class WorkshopsCalendar extends Component {
           main_styles={styles.main_stylez}
           title_styles={styles.work_calendar}
           calendar_visible={true}
+          nav={this.onBackPressed}
         >
           <ScrollView>
             <WorkshopCalendarItem 

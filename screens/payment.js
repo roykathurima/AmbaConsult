@@ -17,11 +17,14 @@ export default class Payment extends Component {
       this.props.navigation.navigate("download_ebook")
     }
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
-        <PlainHeader title="Payment" />
+        <PlainHeader title="Payment" nav={this.onBackPressed}/>
         <View style={{ marginHorizontal: 20, marginTop: 40 }}>
           <Text style={styles.main_text}>Select Payment Option</Text>
           <CheckPayment choice="Google Pay" />

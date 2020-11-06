@@ -1,10 +1,12 @@
 import React from "react";
-import { StyleSheet, Image, View, Text } from "react-native";
+import { StyleSheet, Image, View, Text, TouchableOpacity } from "react-native";
 
 export default function AccountHeadBanner(props) {
   return (
     <View style={styles.back_logo}>
+      <TouchableOpacity onPress={props.nav}>
       <Image source={require("../assets/white_back.png")} />
+      </TouchableOpacity>
       <Text style={styles.account}>{props.title}</Text>
     </View>
   );

@@ -1,8 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, {Component} from "react";
-import { StyleSheet, ImageBackground, Text, Image, View } from "react-native";
+import { StyleSheet, ImageBackground, Image, View, ProgressBarAndroid } from "react-native";
 import LogoText from "../components/logo_text";
-
 export default class Splash extends Component {
   constructor(props){
     super(props)
@@ -12,7 +11,7 @@ export default class Splash extends Component {
   }
   componentDidMount(){
     setTimeout(()=>{
-      this.setState({isLoading: false})
+      // this.setState({isLoading: false})
       this.props.navigation.navigate("login");
     }, 3000)
   }
@@ -27,6 +26,7 @@ render(){
         <Image source={require("../assets/logo.png")} />
         <LogoText />
       </View>
+      <ProgressBarAndroid styleAttr="Horizontal" color="#5C738B" progress={1} style={styles.progress}/>
     </ImageBackground>
   );
 }
@@ -37,4 +37,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: "40%",
   },
+  progress: {
+    width: "95%",
+    alignSelf: "center",
+    marginTop: "90%",
+    borderRadius: 10
+  }
 });

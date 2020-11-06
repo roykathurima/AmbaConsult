@@ -12,6 +12,9 @@ export default class WorkshopDetails extends Component {
   onBookPressed = ()=>{
     this.props.navigation.navigate("payment", {from: "workshop_details"});
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -22,6 +25,7 @@ export default class WorkshopDetails extends Component {
           image_styles={styles.big_workshop}
           main_styles={styles.main_body}
           title_styles={styles.workshops}
+          nav={this.onBackPressed}
         >
           <ScrollView>
             <Text style={styles.main_text}>
