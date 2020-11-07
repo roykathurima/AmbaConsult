@@ -18,6 +18,10 @@ export default class WorkshopsCalendar extends Component {
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
   }
+  componentDidMount(){
+    const {what} = this.props.route.params
+    alert(what)
+  }
   render(){
     return (
       <View style={styles.container}>

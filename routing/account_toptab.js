@@ -8,11 +8,14 @@ import AccountHeadBanner from "../components/ac_head_banner"
 
 const TopTabs = createMaterialTopTabNavigator();
 
-export default function AccountTopTabNav() {
+export default function AccountTopTabNav({navigation}) {
+  const onBackPressed = ()=>{
+    navigation.goBack(null)
+  }
   return (
       <View style={styles.container}>
           <StatusBar style="auto" />
-          <AccountHeadBanner title="Account"/>
+          <AccountHeadBanner title="Account" nav={onBackPressed} />
           <View style={{marginTop:20, flex:1}}>
       <TopTabs.Navigator
       tabBarOptions={{activeTintColor:"#5C738B", inactiveTintColor: "#598D7D", indicatorStyle:{backgroundColor:"#BBDAAA", top:0, height:null}}}

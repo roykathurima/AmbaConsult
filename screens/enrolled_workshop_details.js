@@ -3,7 +3,10 @@ import React from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import HomeSkeleton from "../components/home_skeleton";
 
-export default function EnrolledWorkshopDetails() {
+export default function EnrolledWorkshopDetails({navigation}) {
+  const onBackPressed = ()=>{
+    navigation.goBack(null)
+  }
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -13,6 +16,7 @@ export default function EnrolledWorkshopDetails() {
         image_styles={styles.big_workshop}
         main_styles={styles.main_body}
         title_styles={styles.workshops}
+        nav={onBackPressed}
       >
         <ScrollView>
           <Text style={styles.main_text}>

@@ -8,10 +8,13 @@ export default class HomeWorkshops extends Component {
   // Loop over all the existing workshops mapping to a workshop Item
   constructor(props){
     super(props);
-    this.state={}
+    this.state={
+      loading: false
+    }
   }
-  onWorkShopItemPressed = ()=>{
-    this.props.navigation.navigate("workshop_calendar")
+  onWorkShopItemPressed = (stuff)=>{
+    this.props.navigation.navigate("workshop_calendar", {what: stuff});
+    // alert(stuff)
   }
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
@@ -28,14 +31,15 @@ export default class HomeWorkshops extends Component {
           title_styles={styles.workshops}
           nav={this.onBackPressed}
         >
-          <ScrollView>
-            <WorkshopItem onHandlePress={this.onWorkShopItemPressed} title="Wisdom Lifestyle" />
-            <WorkshopItem onHandlePress={this.onWorkShopItemPressed} title="Alter Serving" />
-            <WorkshopItem onHandlePress={this.onWorkShopItemPressed} title="Business Startups" />
-            <WorkshopItem onHandlePress={this.onWorkShopItemPressed} title="Mental Health" />
-            <WorkshopItem onHandlePress={this.onWorkShopItemPressed} title="Safeguarding" />
+          <ScrollView style={{marginBottom: "30%"}}>
+            <WorkshopItem onHandlePress={this.onWorkShopItemPressed.bind(this, "Wisdom Lifestyle")} title="Wisdom Lifestyle" />
+            <WorkshopItem onHandlePress={this.onWorkShopItemPressed.bind(this, "Altar Serving")} title="Altar Serving" />
+            <WorkshopItem onHandlePress={this.onWorkShopItemPressed.bind(this, "Business Startups")} title="Business Startups" />
+            <WorkshopItem onHandlePress={this.onWorkShopItemPressed.bind(this, "Mental Health")} title="Mental Health" />
+            <WorkshopItem onHandlePress={this.onWorkShopItemPressed.bind(this, "Safeguarding")} title="Safeguarding" />
           </ScrollView>
         </HomeSkeleton>
+        {this.state.loading?<AmbaIndicator />:null}
       </View>
     );
   }

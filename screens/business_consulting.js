@@ -3,11 +3,39 @@ import React, {Component} from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import HomeSkeleton from "../components/home_skeleton";
 import GreenButton from "../components/button";
-
+import firebase from "firebase";
+import 'firebase/firestore';
+import FirebaseConfig from "../constants/api_keys"
+import AmbaIndicator from "../components/amba_indicator"
+// import AsyncStorage from '@react-native-community/async-storage';
 export default class BusinessConsulting extends Component {
   constructor(props){
     super(props);
-    this.state = {}
+    this.state = {
+      message: "",
+      loading: false
+    }
+    if(!firebase.apps.length){
+      firebase.initializeApp(FirebaseConfig);
+    }
+  }
+  // componentDidMount(){
+  //   firebase.messaging().getToken() 
+  //   .then(token=>{
+  //     console.log(token)
+  //     alert(token)
+  //   })
+  // }
+  componentDidMount(){
+    this.setState({loading: true})
+    firebase.firestore()
+    .collection('business_consulting').get()
+    .then((snapshot)=>{
+      this.setState({message:snapshot.docs[0].data().text, loading:false})
+    })
+    .catch(err=>alert(err.message))
+    // AsyncStorage.getItem("user_id",null)
+    // .then(key=>alert(key))
   }
   onContactUsPressed=()=>{
     this.props.navigation.navigate("contact_form");
@@ -29,28 +57,12 @@ export default class BusinessConsulting extends Component {
         >
           <ScrollView style={{ marginBottom: 138 }}>
             <Text style={styles.main_text}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-              et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-              Lorem ipsum dolor sit amet. eos et accusam et justo duo dolores et
-              ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-              Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-              sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-              et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-              accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-              no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-              dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-              tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-              magna aliquyam erat, sed diam voluptua.
+              {this.state.message}
             </Text>
             <GreenButton onHandleClick={this.onContactUsPressed} text="Contact Us" />
           </ScrollView>
         </HomeSkeleton>
+        {this.state.loading?<AmbaIndicator />:null}
       </View>
     );
   }

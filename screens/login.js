@@ -8,13 +8,15 @@ import GreenButton from "../components/button";
 import firebase from "firebase";
 import AmbaIndicator from "../components/amba_indicator"
 import FirebaseConfig from "../constants/api_keys"
+import 'firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Login extends Component {
   constructor(props){
     super(props)
     this.state= {
       email: "kathurimaroy@gmail.com",
-      password: "Constantine",
+      password: "Mjonir",
       loading: false,
     }
     if(!firebase.apps.length){
@@ -26,12 +28,25 @@ export default class Login extends Component {
     // setTimeout(()=>{
     //   this.setState({loading:false})
     // }, 5000)
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+    firebase.auth().signInWithEmailAndPassword(this.state.email.trim().toLowerCase(), this.state.password)
     .then((value)=>{
-      console.log(value)
-      this.setState({loading:false})
+      // console.log(value)
+         firebase.firestore()
+    .collection('users').where('email', '==', this.state.email.trim().toLowerCase()).get()
+    .then((snapshot)=>{ 
+      // alert(snapshot.docs[0].id)
+      AsyncStorage.setItem("user_id", snapshot.docs[0].id)
+      .then(()=>{
+        this.setState({loading:false})
       this.props.navigation.navigate("home");
       this.setState({email:"", password:""})
+      })
+    })
+    .catch(error=>{
+      alert(error)
+    })
+      // alert(value.id)
+      
     })
     .catch((error)=>{
       this.setState({loading:false})

@@ -13,6 +13,9 @@ export default class EnrolledCourses extends Component {
   onViewMaterialPressed = ()=>{
     this.props.navigation.navigate("materials")
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -22,9 +25,10 @@ export default class EnrolledCourses extends Component {
           main_styles={styles.main_stylez}
           title_styles={styles.courses}
           calendar_visible={false}
+          nav={this.onBackPressed}
         >
           <SearchInput placeholder="Search Courses" />
-          <ScrollView style={{ marginBottom: 30, marginTop: 10 }}>
+          <ScrollView style={{ marginBottom: 200, marginTop: 10 }}>
             <CourseItem
               button_title="View Material"
               title="Core Certificate"

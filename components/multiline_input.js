@@ -12,6 +12,7 @@ export default function MultiLineInput(props) {
         multiline={true}
         numberOfLines={8}
         placeholder={props.placeholder}
+        onChangeText={props.onHandleTextChange}
       />
     </View>
   );

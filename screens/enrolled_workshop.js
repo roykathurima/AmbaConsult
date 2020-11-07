@@ -12,6 +12,9 @@ export default class EnrolledWorkshops extends Component {
   onViewDetailsPressed=()=>{
     this.props.navigation.navigate("enrolled_wdetails")
   }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
   render(){
     return (
       <View style={styles.container}>
@@ -21,6 +24,7 @@ export default class EnrolledWorkshops extends Component {
           main_styles={styles.main_stylez}
           title_styles={styles.courses}
           calendar_visible={true}
+          nav={this.onBackPressed}
         >
           <ScrollView style={{ marginBottom: 210 }}>
             <EnrolledWorkshopCalendarItem

@@ -9,11 +9,14 @@ import SearchInput from "../components/search_input";
 
 const TopTabs = createMaterialTopTabNavigator();
 
-export default function MaterialTopTabNav() {
+export default function MaterialTopTabNav({navigation}) {
+  const onBackPressed = ()=>{
+    navigation.goBack(null)
+  }
   return (
       <View style={styles.container}>
           <StatusBar style="auto" />
-          <PlainHeader title="Account"/>
+          <PlainHeader title="Account" nav={onBackPressed} />
           <SearchInput placeholder="Search Videos" />
           <View style={{marginTop:20, flex:1}}>
       <TopTabs.Navigator
