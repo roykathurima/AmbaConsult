@@ -4,11 +4,25 @@ import { StyleSheet, View, ScrollView } from "react-native";
 import HomeSkeleton from "../components/home_skeleton";
 import SearchInput from "../components/search_input";
 import CourseItem from "../components/course_item";
+import firebase from "firebase";
+import FirebaseConfig from "../constants/api_keys"
+import 'firebase/firestore';
+import 'firebase/storage';
+import AmbaIndicator from "../components/amba_indicator"
 
 export default class HomeCoursesList extends Component {
   constructor(props){
     super(props);
     this.state={}
+    if(!firebase.apps.length){
+      firebase.initializeApp(FirebaseConfig);
+    }
+  }
+  componentDidMount(){
+    const image = firebase.storage().ref().child('course_image.png');
+    image.getDownloadURL()
+    .then(url=>alert(url))
+    .catch(err=>alert(err.message))
   }
   onViewPressed = ()=>{
     this.props.navigation.navigate("course_detail")
