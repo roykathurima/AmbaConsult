@@ -26,7 +26,7 @@ export default function PurchasedEBookItem(props) {
         }}
       >
         <Image source={require("../assets/pdf_logo.png")} />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={props.onHandlePress} >
           <Text style={styles.btn_text}>Download PDF</Text>
         </TouchableOpacity>
       </View>

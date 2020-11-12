@@ -1,41 +1,111 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { StyleSheet, View, Image, ImageBackground } from "react-native";
+import React, {Component} from "react";
+import { StyleSheet, View, Image, ImageBackground, TouchableOpacity } from "react-native";
 import LogoText from "../components/logo_text";
 import PurchasedEBookItem from "../components/purchased_ebook_item";
+import * as FileSystem from "expo-file-system"
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
 
-export default function DownloadEBook() {
+export default class DownloadEBook extends Component {
   // The PurchasedEBookItem element should take its own styles
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <View style={styles.back_logo}>
-        <Image source={require("../assets/back.png")} />
-        <View style={styles.logo}>
-          <Image source={require("../assets/logo.png")} />
-          <LogoText />
+  constructor(props){
+    super(props);
+    this.state={
+      progress:0,
+      url:'https://firebasestorage.googleapis.com/v0/b/ambaconsult.appspot.com/o/pdfs%2FGB4-Mini.pdf?alt=media&token=5323b6c2-195f-4d8a-a906-7e1d74ccbd48'
+    }
+  }
+  onBackPressed = ()=>{
+    this.props.navigation.goBack(null)
+  }
+  onDownloadPressed = ()=>{
+    WebBrowser.openBrowserAsync(this.state.url)
+    // alert(this.state.progress)
+    // FileSystem.downloadAsync(
+    //   this.state.url,
+    //   FileSystem.documentDirectory + 'credits.pdf',
+    //   {},
+    //   )
+    //   .then(({uri})=>{
+    //     WebBrowser.openBrowserAsync(this.state.url)
+    //     .catch(err=>alert(err.message))
+    //     // Linking.canOpenURL(uri)
+    //     // .then(supported => {
+    //     //   alert('supported: '+supported )
+    //     //   if (supported) {
+    //     //     Linking.openURL(uri)
+    //     //     .catch(err=>alert(err.message))
+    //     //   }
+    //     //   else {
+    //     //     console.log('File not supported…');
+    //     //   }
+    //     // })
+    //     // .catch(err=>alert(err.message))
+    //     // alert(uri)
+    //     // Sharing.shareAsync(uri,
+    //     //   {mimeType:"application/pdf"}
+    //     //   )
+          
+    //     // Permissions.askAsync(Permissions.CAMERA_ROLL)
+    //     // .then(({status})=>{
+    //     //   if(status == 'granted'){
+    //     //     MediaLibrary.createAssetAsync(uri)
+    //     //     .then(asset=>{
+    //     //       MediaLibrary.createAlbumAsync("Download", asset, false)
+    //     //       .then(()=>console.log("successfully downloaded into deownloads"))
+    //     //     })
+    //     //     .catch(err=>alert(err.message))
+    //     //   }
+    //     // })
+    //     // .catch(err=>alert(err.message))
+    //   })
+    //   .catch(err=>alert("problem: "+err.message))
+  }
+  // getProgess = downloadProgress => {
+  //   const _progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+  //   this.setState({
+  //     progress: _progress,
+  //   });
+  // };
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <View style={styles.back_logo}>
+          <TouchableOpacity onPress={this.onBackPressed}>
+          <Image source={require("../assets/back.png")} />
+          </TouchableOpacity>
+          <View style={styles.logo}>
+            <Image source={require("../assets/logo.png")} />
+            <LogoText />
+          </View>
         </View>
+        <ImageBackground
+          style={{
+            height: 328,
+            width: 383,
+            position: "absolute",
+            bottom: -150,
+            right: -150,
+          }}
+          source={require("../assets/elipse_decor.png")}
+        />
+        <View style={styles.image_stylez}>
+          <Image source={require("../assets/big_ebooks.png")} />
+        </View>
+        <PurchasedEBookItem
+          book_title="Introduction to Health and Social Care"
+          author="Robert Newmann"
+          style={styles.card}
+          onHandlePress={this.onDownloadPressed}
+        />
       </View>
-      <ImageBackground
-        style={{
-          height: 328,
-          width: 383,
-          position: "absolute",
-          bottom: -150,
-          right: -150,
-        }}
-        source={require("../assets/elipse_decor.png")}
-      />
-      <View style={styles.image_stylez}>
-        <Image source={require("../assets/big_ebooks.png")} />
-      </View>
-      <PurchasedEBookItem
-        book_title="Introduction to Health and Social Care"
-        author="Richard Newmann"
-        style={styles.card}
-      />
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({

@@ -14,7 +14,7 @@ export default function SearchInput(props) {
         style={{ marginTop: 7, marginStart: 10, marginEnd: 8 }}
         source={require("../assets/search_icon.png")}
       />
-      <TextInput style={{ width: "100%" }} placeholder={props.placeholder} />
+      <TextInput style={{ width: "100%" }} placeholder={props.placeholder} onChangeText={props.onTextChanged} onSubmitEditing={props.onSubmit}/>
     </View>
   );
 }

@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, {Component} from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, FlatList, Keyboard } from "react-native";
 import HomeSkeleton from "../components/home_skeleton";
 import SearchInput from "../components/search_input";
 import CourseItem from "../components/course_item";
@@ -13,22 +13,49 @@ import AmbaIndicator from "../components/amba_indicator"
 export default class HomeCoursesList extends Component {
   constructor(props){
     super(props);
-    this.state={}
+    this.state={
+      loading: false,
+      courses: [],
+      cp: []
+    }
     if(!firebase.apps.length){
       firebase.initializeApp(FirebaseConfig);
     }
   }
   componentDidMount(){
-    const image = firebase.storage().ref().child('course_image.png');
-    image.getDownloadURL()
-    .then(url=>alert(url))
-    .catch(err=>alert(err.message))
+    this.setState({loading: true})
+    firebase.firestore().collection('courses').get()
+    .then(snapshot=>{
+      snapshot.forEach(course=>{
+        const item = {
+          key: course.id,
+          title: course.data().course_title,
+          image: course.data().course_image,
+          description: course.data().description,
+          pricing: course.data().pricing
+        }
+        this.state.courses.push(item)
+        this.state.cp.push(item)
+      })
+      this.setState({loading: false})
+    })
   }
-  onViewPressed = ()=>{
-    this.props.navigation.navigate("course_detail")
+  onViewPressed = (item)=>{
+    this.props.navigation.navigate("course_detail", {description: item.description, pricing: item.pricing, course_id: item.key})
   }
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
+  }
+  onSearchTextChanged = (text)=>{
+    const new_array = this.state.cp.filter(course=>{
+      // alert(course.title+"vs"+text)
+      return course.title.toLowerCase().includes(text.toLowerCase())
+    })
+    if(text == null || text == undefined || text == ""){
+      this.setState({courses: this.state.cp})
+      return;
+    }
+    this.setState({courses: new_array})
   }
   render(){
     return (
@@ -42,8 +69,19 @@ export default class HomeCoursesList extends Component {
           title_styles={styles.courses}
           nav={this.onBackPressed}
         >
-          <SearchInput placeholder="Search Courses" />
-          <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>
+          <SearchInput placeholder="Search Courses" onTextChanged={this.onSearchTextChanged} onSubmit={Keyboard.dismiss}/>
+          <FlatList
+          style={{marginBottom:"32%", marginTop: 10}}
+          data={this.state.courses}
+          renderItem={itemData=>(
+            <CourseItem
+              title={itemData.item.title}
+              img_url={{uri: itemData.item.image}}
+              onHandlePress={this.onViewPressed.bind(this, itemData.item)}
+            />
+          )}
+          />
+          {/* <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>
             <CourseItem
               title="Core Certificate"
               img_url={require("../assets/course_image.png")}
@@ -59,8 +97,9 @@ export default class HomeCoursesList extends Component {
               img_url={require("../assets/course_image2.png")}
               onHandlePress={this.onViewPressed}
             />
-          </ScrollView>
+          </ScrollView> */}
         </HomeSkeleton>
+        {this.state.loading?<AmbaIndicator/>:null}
       </View>
     );
   }

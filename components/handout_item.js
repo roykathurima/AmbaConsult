@@ -19,7 +19,7 @@ export default function HandoutItem(props) {
           marginTop: 20,
         }}
       >
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={props.onHandlePress}>
           <Text style={styles.btn_text}>Download</Text>
         </TouchableOpacity>
       </View>

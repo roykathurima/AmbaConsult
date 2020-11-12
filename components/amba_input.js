@@ -4,7 +4,7 @@ import { StyleSheet, View, TextInput } from "react-native";
 export default function AmbaInput(props) {
   return (
     <View style={styles.input_view}>
-      <TextInput onChangeText={props.onHandleTextChange} secureTextEntry={props.secure} style={{ width: "100%" }} placeholder={props.placeholder} />
+      <TextInput value={props.value} editable={props.editable} onChangeText={props.onHandleTextChange} secureTextEntry={props.secure} style={{ width: "100%" }} placeholder={props.placeholder} />
       {/* <TextInput onEndEditing={props.end_edit} secureTextEntry={props.secure} style={{ width: "100%" }} placeholder={props.placeholder} /> */}
     </View>
   );

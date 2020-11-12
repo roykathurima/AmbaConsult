@@ -3,7 +3,7 @@ import { StyleSheet, Image, View, Text, TouchableOpacity } from "react-native";
 
 export default function VideoItem(props) {
   return (
-    <TouchableOpacity style={styles.video_item}>
+    <TouchableOpacity style={styles.video_item} onPress={props.onHandlePress}>
     <Image style={styles.thumbnail} source={require("../assets/course_image.png")}/>
     <View style={styles.video_texts}>
   <Text style={styles.video_title}>{props.video_title}</Text>

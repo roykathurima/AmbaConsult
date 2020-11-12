@@ -56,6 +56,7 @@ export default function HomeBottomTabNav({route}) {
         inactiveBackgroundColor: "#fff",
         tabStyle: { marginVertical: 5, marginHorizontal:5, borderRadius: 30 },
         labelPosition: "beside-icon",
+        keyboardHidesTabBar: true
       }}
     >
       <Tabs.Screen name="Home" component={homeScreen} />
@@ -63,7 +64,7 @@ export default function HomeBottomTabNav({route}) {
       <Tabs.Screen
         name="Reminders"
         component={Reminders}
-        options={{ tabBarBadge: 2 }}
+        // options={{ tabBarBadge: 2 }}
       />
     </Tabs.Navigator>
   );

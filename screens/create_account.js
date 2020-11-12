@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   combobox: {
     width: "100%",
     backgroundColor: "#fff",
-borderRadius: 5,
-marginTop: 15,
+    borderRadius: 5,
+    marginTop: 15,
   },
 });

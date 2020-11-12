@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 
-export default function Calendar() {
+export default function Calendar(props) {
   return (
-    <TouchableOpacity style={[styles.button]}>
-      <Text style={styles.btn_text}>2020-01-01</Text>
+    <TouchableOpacity style={[styles.button]} onPress={props.onHandlePress}>
+      <Text style={styles.btn_text}>{props.text}</Text>
       <Image source={require("../assets/calendar.png")} />
     </TouchableOpacity>
   );

@@ -17,7 +17,7 @@ export default function SecondarySkeleton(props) {
       </View>
       <View style={styles.title_calendar}>
         <Text style={props.title_styles}>{props.title}</Text>
-        {props.calendar_visible ? <Calendar /> : null}
+        {props.calendar_visible ? <Calendar onHandlePress={props.cal} text={props.cal_text} /> : null}
       </View>
       <View style={(styles.main_body, props.main_styles)}>
         {props.children}
