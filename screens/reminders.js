@@ -23,7 +23,7 @@ export default class Reminders extends Component {
         <AccountHeadBanner title="Reminders" nav={this.onBackPressed} />
         <View style={{ marginTop: 30 }}>
           <WorkshopItem onHandlePress={this.onExamsPressed} title="Exams" />
-          <WorkshopItem onHandlePress={this.onWorkshopsPressed} title="Workshops" />
+          {/* <WorkshopItem onHandlePress={this.onWorkshopsPressed} title="Workshops" /> */}
         </View>
       </View>
     );

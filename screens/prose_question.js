@@ -6,7 +6,28 @@ import MultiLineInput from "../components/multiline_input";
 export default class ProseQuestion extends Component {
   constructor(props){
     super(props)
-    this.state = {}
+    this.state = {
+      minutes: 0,
+      seconds: 30,
+      time_timer:undefined
+    }
+  }
+  componentDidMount(){
+    const t = setInterval(()=>{
+      let disp_str = ""
+      if(this.state.seconds == 0 && this.state.minutes == 0){
+        clearInterval(this.state.time_timer)
+        // auto-navigate to the next screen
+        this.props.navigation.navigate("boolean_question")
+        return
+      }
+      if(this.state.seconds == 0){
+        this.setState({minutes: --this.state.minutes, seconds: 60})
+        return
+      }
+      this.setState({seconds: --this.state.seconds})
+    }, 1000)
+    this.setState({time_timer: t})
   }
   onNextPressed = ()=>{
     this.props.navigation.navigate("boolean_question")
@@ -17,7 +38,7 @@ export default class ProseQuestion extends Component {
         <StatusBar style="auto" />
         <View style={styles.back_logo}>
           <Image source={require("../assets/back.png")} />
-          <Text style={styles.timer}>00:30</Text>
+          <Text style={styles.timer}>{this.state.minutes+":"+this.state.seconds}</Text>
         </View>
         <Text style={styles.question_text}>
           Q2. Describe three tasks or responsibilities you may find in a care plan

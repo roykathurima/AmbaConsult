@@ -16,8 +16,14 @@ export default class DownloadEBook extends Component {
     super(props);
     this.state={
       progress:0,
-      url:'https://firebasestorage.googleapis.com/v0/b/ambaconsult.appspot.com/o/pdfs%2FGB4-Mini.pdf?alt=media&token=5323b6c2-195f-4d8a-a906-7e1d74ccbd48'
+      book_title: "",
+      author:"",
+      url:'',
     }
+  }
+  componentDidMount(){
+    const {book_title, author, book_file} = this.props.route.params
+    this.setState({book_title: book_title, author: author, url: book_file})
   }
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
@@ -98,8 +104,8 @@ export default class DownloadEBook extends Component {
           <Image source={require("../assets/big_ebooks.png")} />
         </View>
         <PurchasedEBookItem
-          book_title="Introduction to Health and Social Care"
-          author="Robert Newmann"
+          book_title={this.state.book_title}
+          author={this.state.author}
           style={styles.card}
           onHandlePress={this.onDownloadPressed}
         />

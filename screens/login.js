@@ -15,8 +15,10 @@ export default class Login extends Component {
   constructor(props){
     super(props)
     this.state= {
-      email: "kathurimaroy@gmail.com",
-      password: "Mjonir",
+      // email: "kathurimaroy@gmail.com",
+      // password: "Mjonir",
+      email:"",
+      password: "",
       loading: false,
     }
     if(!firebase.apps.length){
@@ -35,11 +37,11 @@ export default class Login extends Component {
     .collection('users').where('email', '==', this.state.email.trim().toLowerCase()).get()
     .then((snapshot)=>{ 
       // alert(snapshot.docs[0].id)
-      AsyncStorage.setItem("user_id", snapshot.docs[0].id)
+      AsyncStorage.setItem('user_id', snapshot.docs[0].id)
       .then(()=>{
         this.setState({loading:false})
-      this.props.navigation.navigate("home");
-      this.setState({email:"", password:""})
+        this.props.navigation.navigate("home");
+        this.setState({email:"", password:""})
       })
     })
     .catch(error=>{

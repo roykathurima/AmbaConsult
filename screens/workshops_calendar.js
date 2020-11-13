@@ -47,12 +47,10 @@ export default class WorkshopsCalendar extends Component {
     })
   }
   onViewDetailsPressed=(item)=>{
-    this.props.navigation.navigate("workshop_details");
+    this.props.navigation.navigate("workshop_details", {description: item.description, pricing: item.pricing, workshop_id:item.key});
   }
   onBookPressed=(item)=>{
-    // this.props.navigation.navigate("payment", {from: "workshops"});
-    const date = new Date("23 July 2020")
-    alert(date)
+    this.props.navigation.navigate("payment", {from: "workshops", pricing: item.pricing, workshop_id: item.key});
   }
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)

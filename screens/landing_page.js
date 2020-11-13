@@ -2,24 +2,60 @@ import { StatusBar } from "expo-status-bar";
 import React, {Component} from "react";
 import { StyleSheet, Text, Image, View, ImageBackground } from "react-native";
 import HomeCard from "../components/home_card";
+import AsyncStorage from '@react-native-community/async-storage';
+import AmbaIndicator from "../components/amba_indicator"
 
 export default class LandingPage extends Component {
   constructor(props){
     super(props);
-    this.state={}
+    this.state={
+      student: null,
+      loading: false
+    }
   }
-  // You will however need to check to see if the individual is logged prior to navigating
+  componentDidMount(){
+    this.setState({loading: true})
+    AsyncStorage.getItem('user_id', null)
+    .then(id=>{
+      this.setState({student: id, loading: false})
+    })
+  }
+  componentDidUpdate(){
+    AsyncStorage.getItem('user_id', null)
+    .then(id=>{
+      // alert(id)
+      this.setState({student: id})
+    })
+  }
+  // ALGORITHM
+  // if user_id exists we navigate, else redirect to login page
   onBusinessConsultingPressed=()=>{
-    this.props.navigation.navigate("home_stack", {intended_screen: "business"});
+    if(this.state.student != null || this.state.student != undefined ){
+      this.props.navigation.navigate("home_stack", {intended_screen: "business"});
+    } else{
+      this.props.navigation.navigate("login")
+    }
   }
   onCoursesListPressed=()=>{
-    this.props.navigation.navigate("home_stack", {intended_screen: "courses"});
+    if(this.state.student != null || this.state.student != undefined ){
+      this.props.navigation.navigate("home_stack", {intended_screen: "courses"});
+    } else{
+      this.props.navigation.navigate('login');
+    }
   }
   onWorkshopsPressed=()=>{
-    this.props.navigation.navigate("home_stack", {intended_screen: "workshops"});
+    if(this.state.student != null || this.state.student != undefined ){
+      this.props.navigation.navigate("home_stack", {intended_screen: "workshops"});
+    } else{
+      this.props.navigation.navigate('login')
+    }
   }
   onEBooksPressed=()=>{
-    this.props.navigation.navigate("home_stack", {intended_screen: "ebooks"});
+    if(this.state.student != null || this.state.student != undefined ){
+      this.props.navigation.navigate("home_stack", {intended_screen: "ebooks"});
+    } else{
+      this.props.navigation.navigate('login')
+    }
   }
   render(){
     return (
@@ -57,6 +93,7 @@ export default class LandingPage extends Component {
             onHandlePress={this.onEBooksPressed}
           />
         </View>
+        {this.state.loading?<AmbaIndicator/>:null}
       </View>
     );
   }

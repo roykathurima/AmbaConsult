@@ -8,7 +8,7 @@ export default function GreenButton(props) {
       onPress={props.onHandleClick}
       disabled={props.disabled}
     >
-      {props.price_text?<Text style={{...styles.btn_text, color:"#C26937", marginEnd: "2%"}}>{props.price_text}</Text>:null}
+      {props.price_text?<Text style={{...styles.btn_text, color:"#C26937", marginEnd: "2%"}}>{'£'+props.price_text}</Text>:null}
       <Text style={styles.btn_text}>{props.text}</Text>
     </TouchableOpacity>
   );

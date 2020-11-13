@@ -9,7 +9,7 @@ import SearchInput from "../components/search_input";
 
 const TopTabs = createMaterialTopTabNavigator();
 
-export default function MaterialTopTabNav({navigation}) {
+export default function MaterialTopTabNav({navigation, route}) {
   const onBackPressed = ()=>{
     navigation.goBack(null)
   }

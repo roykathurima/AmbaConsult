@@ -6,7 +6,27 @@ import CheckAnswer from "../components/check_answers";
 export default class MultipleChoiceQuestion extends Component {
   constructor(props){
     super(props)
-    this.state= {}
+    this.state= {
+      minutes: 1,
+      seconds: 20,
+      time_timer:undefined
+    }
+  }
+  componentDidMount(){
+    const t = setInterval(()=>{
+      if(this.state.seconds == 0 && this.state.minutes == 0){
+        clearInterval(this.state.time_timer)
+        // auto-navigate to the next screen
+        this.props.navigation.navigate("prose_question")
+        return
+      }
+      if(this.state.seconds == 0){
+        this.setState({minutes: --this.state.minutes, seconds: 60})
+        return
+      }
+      this.setState({seconds: --this.state.seconds})
+    }, 1000)
+    this.setState({time_timer: t})
   }
   onNextPressed = ()=>{
     this.props.navigation.navigate("prose_question")
@@ -17,7 +37,7 @@ export default class MultipleChoiceQuestion extends Component {
         <StatusBar style="auto" />
         <View style={styles.back_logo}>
           <Image source={require("../assets/back.png")} />
-          <Text style={styles.timer}>01:30</Text>
+          <Text style={styles.timer}>{this.state.minutes+":"+this.state.seconds}</Text>
         </View>
         <Text style={styles.question_text}>
           Q1. Which of the following is NOT a care certificate standard?

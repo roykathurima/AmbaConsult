@@ -75,11 +75,10 @@ export default class ForgotPassword extends Component {
           </View>
           <Text style={styles.forgot_password}>Forgot Password</Text>
           <Text style={styles.long_text}>
-            Please Enter Your Email. To Ensure Security of your account, OTP code
-            will be sent to the Phone Number you Registered with
+            Please Enter Your Email. A Password Reset Link will be sent this Email to enable you to Enter your new Password 
           </Text>
           <EmailField onHandleTextChange={(text)=>{this.setState({email:text})}}/>
-          <GreenButton text="Start Verification" onHandleClick={this.onStartVerificationPressed}/>
+          <GreenButton text="Send Password Reset Link" onHandleClick={this.onStartVerificationPressed}/>
           
           <View style={styles.register_view}>
             <Text style={{ alignSelf: "center", color: "#000" }}>

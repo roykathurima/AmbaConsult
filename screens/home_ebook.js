@@ -20,8 +20,8 @@ export default class HomeEBooks extends Component {
     }
   }
   
-  onPurchasePressed=()=>{
-    this.props.navigation.navigate("payment", {from:"ebooks"});
+  onPurchasePressed=(item)=>{
+    this.props.navigation.navigate("payment", {from:"ebooks", pricing: item.price, ebook_id: item.key, book_title:item.book_title, book_file: item.file, author: item.author});
   }
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
@@ -35,7 +35,8 @@ export default class HomeEBooks extends Component {
           key: obj.id,
           author: obj.data().author,
           book_title: obj.data().book_title,
-          price: obj.data().price
+          price: obj.data().price,
+          file: obj.data().book_file
         }
         this.state.ebooks.push(e_book)
       })
@@ -61,7 +62,7 @@ export default class HomeEBooks extends Component {
               book_title={itemData.item.book_title}
               author={itemData.item.author}
               price={`£ ${itemData.item.price}`}
-              onHandlePress={this.onPurchasePressed}
+              onHandlePress={this.onPurchasePressed.bind(this, itemData.item)}
             />
           )}
           />

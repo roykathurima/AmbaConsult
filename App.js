@@ -1,5 +1,6 @@
 import React from "react";
 import {NavigationContainer} from "@react-navigation/native"
+import { LogBox } from "react-native";
 import {createStackNavigator} from "@react-navigation/stack"
 import Splash from "./screens/splash"
 import Login from "./screens/login"
@@ -15,6 +16,8 @@ import EnrolledWorkshops from "./screens/enrolled_workshop"
 import EnrolledWorkshopDetails from "./screens/enrolled_workshop_details"
 import PurchasedEBooks from "./screens/purchased_ebooks";
 import MaterialTopTabNav from "./routing/materials_toptab"
+
+LogBox.ignoreAllLogs()
 const InitialStack = createStackNavigator();
 export default function InitStack() {
   return (

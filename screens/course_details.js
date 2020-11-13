@@ -18,7 +18,7 @@ export default class CourseDetails extends Component {
     this.setState({description: description, pricing: pricing, course_id: course_id})
   }
   onEnrollPressed = ()=>{
-    this.props.navigation.navigate("payment", {from:"course", course_id: this.state.course_id});
+    this.props.navigation.navigate("payment", {from:"course", course_id: this.state.course_id, pricing: this.state.pricing});
   }
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
@@ -46,8 +46,8 @@ export default class CourseDetails extends Component {
             marginTop: 0,
             marginBottom: 50,
           }}
-          price_text={`£${this.state.pricing}`}
-          text={`ENROLL`}
+          price_text={this.state.pricing}
+          text={'ENROLL'}
           onHandleClick={this.onEnrollPressed}
         />
       </View>

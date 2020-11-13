@@ -12,7 +12,7 @@ export default class Splash extends Component {
   componentDidMount(){
     setTimeout(()=>{
       // this.setState({isLoading: false})
-      this.props.navigation.navigate("login");
+      this.props.navigation.navigate("home");
     }, 3000)
   }
 render(){

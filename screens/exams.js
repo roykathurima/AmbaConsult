@@ -9,6 +9,9 @@ export default class Exams extends Component {
     super(props)
     this.state = {}
   }
+  componentDidMount(){
+    // Should return a list of exams for all the courses that the student is enrolled in
+  }
   onTakeTestPressed = ()=>{
     this.props.navigation.navigate("multiple_choice_question")
   }

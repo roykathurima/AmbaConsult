@@ -151,16 +151,34 @@ export default class AccountProfile extends Component {
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
   }
+  onLogoutPressed = ()=>{
+    firebase.auth().signOut()
+    .then(()=>{
+      AsyncStorage.removeItem('user_id')
+      .then(()=>this.props.navigation.navigate('home'))
+    })
+    .catch(err=>alert(err.message))
+  }
   render(){
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+
+        <View style={styles.action_icons}>
         <TouchableOpacity onPress={this.onEditPressed}>
         <Image
           style={styles.edit_icon}
           source={require("../assets/edit_icon.png")}
         />
         </TouchableOpacity>
+        <TouchableOpacity onPress={this.onLogoutPressed}>
+        <Image
+          style={styles.edit_icon}
+          source={require("../assets/logout.png")}
+        />
+        </TouchableOpacity>
+        </View>
+        
         <TouchableOpacity onPress={this.onImagePressed}>
           <View style={styles.pic_loading_box}>
           {this.state.img?
@@ -231,4 +249,8 @@ const styles = StyleSheet.create({
     borderRadius:80,
     color:"red"
   },
+  action_icons:{
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  }
 });

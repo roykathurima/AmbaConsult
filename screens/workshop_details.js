@@ -7,10 +7,18 @@ import GreenButton from "../components/button";
 export default class WorkshopDetails extends Component {
   constructor(props){
     super(props);
-    this.state = {}
+    this.state = {
+      description: "",
+      pricing: undefined,
+      workshop_id: ""
+    }
+  }
+  componentDidMount(){
+    const {description, pricing, workshop_id} = this.props.route.params
+    this.setState({description: description, pricing: pricing, workshop_id: workshop_id})
   }
   onBookPressed = ()=>{
-    this.props.navigation.navigate("payment", {from: "workshop_details"});
+    this.props.navigation.navigate("payment", {from: "workshops", pricing: this.state.pricing, workshop_id: this.state.workshop_id});
   }
   onBackPressed = ()=>{
     this.props.navigation.goBack(null)
@@ -28,26 +36,7 @@ export default class WorkshopDetails extends Component {
           nav={this.onBackPressed}
         >
           <ScrollView>
-            <Text style={styles.main_text}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-              et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-              Lorem ipsum dolor sit amet. eos et accusam et justo duo dolores et
-              ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-              Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-              sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-              et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-              accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-              no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-              dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-              tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-              magna aliquyam erat, sed diam voluptua.
-            </Text>
+            <Text style={styles.main_text}>{this.state.description}</Text>
           </ScrollView>
         </HomeSkeleton>
         <GreenButton
@@ -57,7 +46,8 @@ export default class WorkshopDetails extends Component {
             marginTop: 0,
             marginBottom: 50,
           }}
-          text="$19 BOOK"
+          price_text={this.state.pricing}
+          text="BOOK"
           onHandleClick={this.onBookPressed}
         />
       </View>
