@@ -20,7 +20,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.ambaconsult.uk",
+      "package": "com.ambaconsult.co.uk",
       "googleServicesFile": "./google-services.json"
     },
     "web": {

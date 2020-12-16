@@ -12,8 +12,8 @@ export default class ProseQuestion extends Component {
   constructor(props){
     super(props)
     this.state = {
-      minutes: 2,
-      seconds: 20,
+      minutes: 5,
+      seconds: 30,
       time_timer:undefined,
       questions: [],
       // {quiz_no, exam_id, quiz_txt, quiz_type, no_of_marks, id}

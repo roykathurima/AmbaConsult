@@ -12,7 +12,7 @@ export default class BooleanQuestion extends Component {
   constructor(props){
     super(props);
     this.state={
-      minutes: 0,
+      minutes: 5,
       seconds: 30,
       time_timer:undefined,
       answer_value: undefined,
