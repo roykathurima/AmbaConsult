@@ -5,7 +5,6 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import MaterialHandouts from "../screens/material_handouts"
 import MaterialVideo from "../screens/material_video"
 import PlainHeader from "../components/plain_header"
-import SearchInput from "../components/search_input";
 
 const TopTabs = createMaterialTopTabNavigator();
 
@@ -17,7 +16,7 @@ export default function MaterialTopTabNav({navigation, route}) {
       <View style={styles.container}>
           <StatusBar style="auto" />
           <PlainHeader title="Account" nav={onBackPressed} />
-          <SearchInput placeholder="Search Videos" />
+          {/* <SearchInput placeholder="Search Videos" /> */}
           <View style={{marginTop:20, flex:1}}>
       <TopTabs.Navigator
             tabBarOptions={{activeTintColor:"#5C738B", inactiveTintColor: "#598D7D", indicatorStyle:{backgroundColor:"#BBDAAA", top:0, height:null}}}

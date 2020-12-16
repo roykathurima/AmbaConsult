@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
 export default function CheckAnswer(props) {
-  const [checked, setChecked] = useState(false);
-  const toggleChecked = () => {
-    checked ? setChecked(false) : setChecked(true);
-  };
+  // const [checked, setChecked] = useState(false);
+  // const toggleChecked = () => {
+  //   checked ? setChecked(false) : setChecked(true);
+  // };
   return (
     <View style={styles.input_view}>
-      <TouchableOpacity onPress={toggleChecked}>
-        {checked ? (
+      <TouchableOpacity onPress={props.toggleChecked}>
+        {props.checked ? (
           <Image source={require("../assets/checkbox_enabled.png")} />
         ) : (
           <Image source={require("../assets/checkbox_disabled.png")} />

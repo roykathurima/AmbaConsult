@@ -1,26 +1,31 @@
 import { StatusBar } from "expo-status-bar";
 import React, {Component} from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Keyboard } from "react-native";
 import HandoutItem from "../components/handout_item";
 import firebase from "firebase";
 import 'firebase/firestore';
 import FirebaseConfig from "../constants/api_keys"
 import AmbaIndicator from "../components/amba_indicator"
 import * as WebBrowser from 'expo-web-browser';
+import AsyncStorage from '@react-native-community/async-storage';
+import SearchInput from "../components/search_input";
+
 export default class MaterialHandouts extends Component {
   constructor(props){
     super(props);
     this.state={
       loading: false,
       handouts: [],
+      cp: [],
     }
     if(!firebase.apps.length){
       firebase.initializeApp(FirebaseConfig);
     }
   }
-  componentDidMount(){
+  async componentDidMount(){
     this.setState({loading: true});
-    firebase.firestore().collection('course_material').where('type', '==', 'handout').get()
+    const key = await AsyncStorage.getItem('course_id')
+    firebase.firestore().collection('course_material').where('type', '==', 'handout').where('course', '==', key).get()
     .then(snapshot=>{
       snapshot.forEach(handout=>{
         const item = {
@@ -29,6 +34,7 @@ export default class MaterialHandouts extends Component {
           file: handout.data().file
         }
         this.state.handouts.push(item)
+        this.state.cp.push(item)
       })
       this.setState({loading: false})
     })
@@ -39,10 +45,22 @@ export default class MaterialHandouts extends Component {
     WebBrowser.openBrowserAsync(item.file)
     .then(()=>this.setState({loading: false}))
   }
+  onSearchTextChanged = (text)=>{
+    const new_array = this.state.cp.filter(handout=>{
+      // alert(course.title+"vs"+text)
+      return handout.title.toLowerCase().includes(text.toLowerCase())
+    })
+    if(text == null || text == undefined || text == ""){
+      this.setState({handouts: this.state.cp})
+      return;
+    }
+    this.setState({handouts: new_array})
+  }
   render(){
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <SearchInput placeholder="Search Handouts" onTextChanged={this.onSearchTextChanged} onSubmit={Keyboard.dismiss}/>
         <FlatList
         data={this.state.handouts}
         renderItem={itemData=>(
@@ -73,7 +91,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 30,
+    paddingTop: 10,
+    paddingHorizontal: 5,
   },
   card: {
     marginTop: 30,

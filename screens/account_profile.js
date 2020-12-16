@@ -154,7 +154,8 @@ export default class AccountProfile extends Component {
   onLogoutPressed = ()=>{
     firebase.auth().signOut()
     .then(()=>{
-      AsyncStorage.removeItem('user_id')
+      // AsyncStorage.removeItem('user_id')
+      AsyncStorage.multiRemove(['user_id', 'course_id', 'student_name'])
       .then(()=>this.props.navigation.navigate('home'))
     })
     .catch(err=>alert(err.message))

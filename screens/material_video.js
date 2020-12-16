@@ -6,12 +6,16 @@ import {
   View,
   StyleSheet,
   FlatList,
+  Keyboard,
+  Alert,
 } from "react-native";
 import VideoItem from "../components/video_item";
 import firebase from "firebase";
 import 'firebase/firestore';
 import FirebaseConfig from "../constants/api_keys"
 import AmbaIndicator from "../components/amba_indicator"
+import AsyncStorage from '@react-native-community/async-storage';
+import SearchInput from "../components/search_input";
 
 export default class MaterialVideo extends Component {
   constructor(props){
@@ -19,16 +23,24 @@ export default class MaterialVideo extends Component {
     this.state={
       loading: false,
       videos: [],
-      playing_video: undefined,
+      cp: [],
+      playing_video: {},
     }
     if(!firebase.apps.length){
       firebase.initializeApp(FirebaseConfig);
     }
   }
-  componentDidMount(){
+  async componentDidMount(){
     this.setState({loading: true})
-    firebase.firestore().collection('course_material').where('type', "==", "video").get()
+    const key = await AsyncStorage.getItem('course_id', null)
+    firebase.firestore().collection('course_material').where('type', "==", "video").where('course', '==', key).get()
     .then(snapshot=>{
+      // alert(snapshot.docs.length)
+      if(snapshot.docs.length == 0){
+        alert("No Materials associated with this Course Exist")
+        setTimeout(()=>{this.props.navigation.goBack(null)}, 1000)
+        return
+      }
       snapshot.forEach(obj=>{
         const video_material = {
           key: obj.id,
@@ -37,14 +49,15 @@ export default class MaterialVideo extends Component {
           now_playing: false,
         }
         this.state.videos.push(video_material)
+        this.state.cp.push(video_material)
       })
       this.state.videos[0].now_playing = true
-      this.setState({loading: false, playing_video:this.state.videos[0].file_name})
-    })
+      this.setState({loading: false, playing_video:this.state.videos[0]})
+    }, err=>alert(err.message))
   }
   onVideoItemPressed = (item)=>{
     // alert(item.key)
-    this.setState({playing_video: item.file_name, loading: true})
+    this.setState({playing_video: item, loading: true})
     this.state.videos.forEach(video=>{
       if(video.key == item.key){
         video.now_playing = true
@@ -54,13 +67,25 @@ export default class MaterialVideo extends Component {
     })
     this.setState({loading: false})
   }
+  onSearchTextChanged = (text)=>{
+    const new_array = this.state.cp.filter(video=>{
+      // alert(course.title+"vs"+text)
+      return video.title.toLowerCase().includes(text.toLowerCase())
+    })
+    if(text == null || text == undefined || text == ""){
+      this.setState({videos: this.state.cp})
+      return;
+    }
+    this.setState({videos: new_array})
+  }
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#F9F9F9" }}>
+        <SearchInput placeholder="Search Videos" onTextChanged={this.onSearchTextChanged} onSubmit={Keyboard.dismiss}/>
         <View
           style={{
             marginHorizontal: 30,
-            marginTop: 40,
+            marginTop: 30,
             backgroundColor: "#00f",
             alignItems: "center",
           }}
@@ -72,7 +97,7 @@ export default class MaterialVideo extends Component {
               resizeMode: Video.RESIZE_MODE_CONTAIN,
               // source: { localUri: "H:/Users/Roy/Downloads/preacher.mp4" },
               source: {
-                uri: this.state.playing_video
+                uri: this.state.playing_video.file_name
                   // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
               },
             }} 
@@ -82,7 +107,7 @@ export default class MaterialVideo extends Component {
             inFullscreen={true}
           />
         </View>
-        <Text style={styles.vieo_title}>Tutorial 1: Introduction to Health and Social Care</Text>
+          <Text style={styles.vieo_title}>{this.state.playing_video.title}</Text>
         <FlatList
         data={this.state.videos}
         renderItem={itemData=>(

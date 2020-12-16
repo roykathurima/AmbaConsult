@@ -5,7 +5,7 @@ import PlainHeader from "../components/plain_header";
 import CheckPayment from "../components/check_payment";
 import GreenButton from "../components/button";
 import StripeCheckout from "expo-stripe-checkout"
-import firebase from "firebase";
+import firebase, { firestore } from "firebase";
 import 'firebase/firestore';
 import FirebaseConfig from "../constants/api_keys"
 import AmbaIndicator from "../components/amba_indicator"
@@ -32,6 +32,12 @@ export default class Payment extends Component {
       this.setState({pricing: pricing, item_id: course_id})
       firebase.firestore().collection('my_courses').where('student', "==", this.state.student_id).get()
       .then(snapshot=>{
+        if(snapshot.docs.length == 0){
+          // This student does not have a record, they are enrolling for the first time
+          firebase,firestore().collection('my_courses').add({courses: [this.state.item_id], student: this.state.student_id})
+          .then(()=>alert("Enroll Successful"))
+          return
+        }
         const exist_array = snapshot.docs[0].data().courses.filter(entry=>{
           return entry == this.state.item_id
         })
@@ -69,6 +75,12 @@ export default class Payment extends Component {
       this.setState({pricing: pricing, item_id: ebook_id})
       firebase.firestore().collection('my_books').where('student', "==", this.state.student_id).get()
       .then(snapshot=>{
+        if(snapshot.docs.length == 0){
+          // This student does not have a record, they are enrolling for the first time
+          firebase,firestore().collection('my_books').add({books: [this.state.item_id], student: this.state.student_id})
+          .then(()=>alert("Purchase Successful"))
+          return
+        }
         const exist_array = snapshot.docs[0].data().books.filter(entry=>{
           return entry == this.state.item_id
         })
@@ -108,6 +120,12 @@ export default class Payment extends Component {
       this.setState({pricing: pricing, item_id: workshop_id})
       firebase.firestore().collection('my_workshops').where('student', "==", this.state.student_id).get()
       .then(snapshot=>{
+        if(snapshot.docs.length == 0){
+          // This student does not have a record, they are enrolling for the first time
+          firebase,firestore().collection('my_workshops').add({workshops: [this.state.item_id], student: this.state.student_id})
+          .then(()=>alert("Booking Successful"))
+          return
+        }
         const exist_array = snapshot.docs[0].data().workshops.filter(entry=>{
           return entry == this.state.item_id
         })

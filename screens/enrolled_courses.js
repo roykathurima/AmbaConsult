@@ -62,7 +62,8 @@ export default class EnrolledCourses extends Component {
     this.setState({courses: new_array})
   }
 
-  onViewMaterialPressed = ()=>{
+  onViewMaterialPressed = (key)=>{
+    AsyncStorage.setItem('course_id', key)
     this.props.navigation.navigate("materials")
   }
   onBackPressed = ()=>{
@@ -88,7 +89,7 @@ export default class EnrolledCourses extends Component {
               button_title="View Material"
               title={itemData.item.course_title}
               img_url={{uri: itemData.item.image}}
-              onHandlePress={this.onViewMaterialPressed}
+              onHandlePress={this.onViewMaterialPressed.bind(this, itemData.item.key)}
             />
           )}
           />

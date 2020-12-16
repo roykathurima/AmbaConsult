@@ -33,11 +33,22 @@ export default class Login extends Component {
     firebase.auth().signInWithEmailAndPassword(this.state.email.trim().toLowerCase(), this.state.password)
     .then((value)=>{
       // console.log(value)
+      if (!value.user.emailVerified){
+        value.user.sendEmailVerification()
+        .then(()=>{
+          this.setState({loading:false})
+          alert("A verification email has been sent to your Email. Please verify your email to be allowed to login")
+          return
+        }, err=>{
+          this.setState({loading:false})
+          alert(err.message)})
+      }
+      // alert(`Verified? ${value.user.emailVerified}`)
          firebase.firestore()
     .collection('users').where('email', '==', this.state.email.trim().toLowerCase()).get()
     .then((snapshot)=>{ 
       // alert(snapshot.docs[0].id)
-      AsyncStorage.setItem('user_id', snapshot.docs[0].id)
+      AsyncStorage.multiSet([['user_id', snapshot.docs[0].id], ['student_name', `${snapshot.docs[0].data().first_name} ${snapshot.docs[0].data().last_name}`]])
       .then(()=>{
         this.setState({loading:false})
         this.props.navigation.navigate("home");

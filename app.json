@@ -4,7 +4,7 @@
     "slug": "AmbaConsult",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/amba_logo.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -24,7 +24,7 @@
       "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.png"
     },
     "description": "Smart Apps Solution for the Amba Consult App",
     "githubUrl": "https://github.com/roykathurima/AmbaConsult"

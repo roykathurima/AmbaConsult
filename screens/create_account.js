@@ -83,22 +83,37 @@ export default class CreateAccount extends Component {
       country_name: this.state.c_name.trim(),
       rank: "student"
     }
-    firebase.firestore().collection('users').add(fs_obj)
-    .then((value)=>{
-      // Perform the auth stuff hapa
-      firebase.auth().createUserWithEmailAndPassword(fs_obj.email, this.state.password)
-      .then((value)=>{
-        this.setState({loading:false})
-        this.props.navigation.navigate("login")
-      })
-      .catch(error=>{
-        alert("Unable to Create your Account... \nPlease Try Again Later");
-      })
+    firebase.firestore().collection('users').where('email', '==', fs_obj.email).get()
+    .then(snap=>{
+      if(snap.docs.length>0){
+        alert("A user with a similar email exists in our database\nPlease choose another email")
+        return
+      }else{
+        firebase.firestore().collection('users').add(fs_obj)
+        .then((value)=>{
+          // Perform the auth stuff hapa
+          firebase.auth().createUserWithEmailAndPassword(fs_obj.email, this.state.password)
+          .then((value)=>{
+            value.user.sendEmailVerification()
+            .then(()=>{
+              this.setState({loading:false})
+              alert("You have been sent a verification email. Verify your email to be allowed to login")
+              setTimeout(()=>{
+                this.props.navigation.navigate("login")
+              }, 2000)
+            }, err=>alert(err.message))
+          })
+          .catch(error=>{
+            alert(error.message);
+          })
+        })
+        .catch(error=>{
+          this.setState({loading:false})
+          alert(error.message);
+        });
+        // End of the else block
+      }
     })
-    .catch(error=>{
-      this.setState({loading:false})
-      alert("Unable to Create your Account... \nPlease Try Again Later");
-    });
   }
   getCountriesFromAPI = ()=>{
     return fetch(this.country_api_url)
