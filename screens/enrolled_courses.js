@@ -31,15 +31,17 @@ export default class EnrolledCourses extends Component {
         snapshot.docs[0].data().courses.forEach(course=>{
           firebase.firestore().collection('courses').doc(course).get()
           .then(snap=>{
-            const item = {
-              key: snap.id,
-              course_title: snap.data().course_title,
-              description: snap.data().description,
-              image: snap.data().course_image
+            if(snap.data()){
+              const item = {
+                key: snap.id,
+                course_title: snap.data().course_title,
+                description: snap.data().description,
+                image: snap.data().course_image
+              }
+              this.state.courses.push(item)
+              this.state.cp.push(item)
+              this.setState({loading: false})
             }
-            this.state.courses.push(item)
-            this.state.cp.push(item)
-            this.setState({loading: false})
           })
           .catch(err=>alert(err.message))
         })

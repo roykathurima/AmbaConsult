@@ -31,6 +31,7 @@ export default function CourseItem(props) {
             justifyContent: "space-between",
             padding: 10,
             width: "100%",
+            // flexWrap: "wrap",
           }}
         >
           <Text style={styles.title_text}>{props.title}</Text>
@@ -48,10 +49,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#8DBA76",
+    overflow: "hidden"
   },
   title_text: {
     fontSize: 16,
+    width: "70%",
     fontWeight: "bold",
     color: "#5C738B",
+    overflow: "hidden"
   },
 });

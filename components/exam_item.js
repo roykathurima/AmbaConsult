@@ -32,7 +32,7 @@ export default function ExamItem(props) {
         }}
       >
         <TouchableOpacity style={styles.button} onPress={props.onHandlePress}>
-          <Text style={styles.btn_text}>Take Test</Text>
+          <Text style={styles.btn_text}>{props.title}</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, {Component} from "react";
-import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, Image, View, ScrollView, TouchableOpacity } from "react-native";
 import LogoText from "../components/logo_text";
 import EmailField from "../components/email";
 import PasswordField from "../components/password";
@@ -79,7 +79,7 @@ export default class Login extends Component {
   }
   render(){
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.back_logo}>
           <TouchableOpacity onPress={this.onBackPressed}>
@@ -111,7 +111,7 @@ export default class Login extends Component {
           </View>
         </View>
         {this.state.loading?<AmbaIndicator />:null}
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   register_view: {
     flexDirection: "row",
-    marginTop: 200,
+    marginTop: 150,
     justifyContent: "center",
   },
   please_login: {

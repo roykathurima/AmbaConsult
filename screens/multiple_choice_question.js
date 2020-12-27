@@ -8,12 +8,13 @@ import 'firebase/firestore';
 import FirebaseConfig from "../constants/api_keys"
 import AmbaIndicator from "../components/amba_indicator"
 
+let count = 0;
 export default class MultipleChoiceQuestion extends Component {
   constructor(props){
     super(props)
     this.state= {
       minutes: 5,
-      seconds: 30,
+      seconds: 0,
       time_timer:undefined,
       questions: [],
       // {quiz_no, exam_id, quiz_txt, quiz_type, no_of_marks, id}
@@ -23,6 +24,7 @@ export default class MultipleChoiceQuestion extends Component {
       loading: false,
       choices: [],
       current_index: 0,
+      new_quiz: false,
       selected_text: '',
       check: false,
       user:{name:'', id:''},
@@ -32,33 +34,58 @@ export default class MultipleChoiceQuestion extends Component {
     // You can also check if the question has been answered by the student before moving on
     const [student_name, user_id] = await AsyncStorage.multiGet(['student_name', 'user_id'])
     // alert(student_name[1] + '' + user_id[1] + '')
-    this.setState({user:{name: student_name[1], id: user_id[1]}})
+    const {questions, choices, minutes, seconds} = this.props.route.params
+    this.setState({user:{name: student_name[1], id: user_id[1]}, minutes: parseInt(minutes), seconds: parseInt(seconds)})
     // alert(this.state.user.name)
-    const {questions, choices} = this.props.route.params
     console.log(questions)
-    if(questions == undefined) return
-    this.setState({choices: choices, current_question: questions.pop(), questions: questions})
+    if(questions == undefined){
+      alert("the question is undefined")
+      return
+    }
+    const q_holder = questions.pop()
+    this.setState({choices: choices, current_question: q_holder, questions: questions})
     console.log(this.state.current_question)
+    alert(this.state.current_question.quiz_txt)
     const t = setInterval(()=>{
       if(this.state.seconds == 0 && this.state.minutes == 0){
         clearInterval(this.state.time_timer)
-        // auto-navigate to the next screen
-        // this.props.navigation.navigate("prose_question")
-        this.performNavigation()
-        return
+        // auto-navigate out of the qustions once the time is up
+        firebase.firestore().collection('exams').doc(question.exam_id).update({completed:true})
+        .then(()=>{
+          this.props.navigation.navigate('exams',{finished:true})
+          return
+        }, err=>{
+          alert(err.message)
+          return
+        })
       }
       if(this.state.seconds == 0){
-        this.setState({minutes: --this.state.minutes, seconds: 60})
+        this.setState({minutes: --this.state.minutes, seconds: 59})
         return
       }
       this.setState({seconds: --this.state.seconds})
     }, 1000)
     this.setState({time_timer: t})
   }
+
+  componentDidUpdate(nextProps, nextState){
+    // The documentation for this is in the boolean question
+    if(nextState.new_quiz && count < 1){
+      count =+1
+      this.setState({new_quiz:false})
+      this.componentDidMount()
+    }
+  }
   performNavigation = ()=>{
     // If there are no more questions, navigate to the exams screen
+    alert(this.state.questions.length)
     if(this.state.questions.length<=0){
-      this.props.navigation.navigate('exams',{finished:true})
+      firebase.firestore().collection('exams').doc(this.state.current_question.exam_id).update({completed:true})
+      .then(()=>{
+        this.props.navigation.navigate('exams',{finished:true})
+      }, err=>{
+        alert(err.message)
+      })
       return
     }
     // this.props.navigation.navigate("prose_question")
@@ -71,12 +98,13 @@ export default class MultipleChoiceQuestion extends Component {
         choices.push(snapshot.docs[0].data().choice2)
         choices.push(snapshot.docs[0].data().choice3)
         choices.push(snapshot.docs[0].data().choice4)
-        this.props.navigation.navigate("multiple_choice_question", {questions: this.state.questions, choices: choices})
+        this.setState({new_quiz:true})
+        this.props.navigation.navigate("multiple_choice_question", {questions: this.state.questions, choices: choices, minutes: this.state.minutes, seconds: this.state.seconds})
       })
     } else if(question.quiz_type == 'boolean'){
-      this.props.navigation.navigate("boolean_question", {questions: this.state.questions})
+      this.props.navigation.navigate("boolean_question", {questions: this.state.questions, minutes: this.state.minutes, seconds: this.state.seconds})
     } else if(question.quiz_type == 'prose'){
-      this.props.navigation.navigate("prose_question", {questions: this.state.questions})
+      this.props.navigation.navigate("prose_question", {questions: this.state.questions, minutes: this.state.minutes, seconds: this.state.seconds})
     }
     // End of Handler
   }
@@ -132,30 +160,31 @@ export default class MultipleChoiceQuestion extends Component {
         return;
     };
 }
-  render(){
-    return (
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-        <View style={styles.back_logo}>
-          <Image source={require("../assets/back.png")} />
-          <Text style={styles.timer}>{this.state.minutes+":"+this.state.seconds}</Text>
-        </View>
-        <Text style={styles.question_text}>
-        {`Q${this.state.current_question.quiz_no}. ${this.state.current_question.quiz_txt}`}
-        </Text>
-        {this.state.choices.map((choice, index)=>{
-          return (
-            <CheckAnswer key={index} checked={this.state.current_index==index&&this.state.check?true:false} toggleChecked={this.toggleCheckedHandler.bind(this, {choice:choice, index:index})} choice={choice} />
-          )
-        })}
-        
-        <TouchableOpacity style={styles.next_container} onPress={this.onNextPressed}>
-          {this.state.questions.length>0?<Text style={styles.next}>Next</Text>:<Text style={styles.next}>Finish</Text>}
-          <Image source={require("../assets/arrow.png")} />
-        </TouchableOpacity>
+
+render(){
+  return (
+    <View style={styles.container}>
+      <StatusBar style="auto" />
+      <View style={styles.back_logo}>
+        <Image source={require("../assets/back.png")} />
+        <Text style={styles.timer}>{this.state.minutes+":"+this.state.seconds}</Text>
       </View>
-    );
-  }
+      <Text style={styles.question_text}>
+      {`Q${this.state.current_question.quiz_no}. ${this.state.current_question.quiz_txt}`}
+      </Text>
+      {this.state.choices.map((choice, index)=>{
+        return (
+          <CheckAnswer key={index} checked={this.state.current_index==index&&this.state.check?true:false} toggleChecked={this.toggleCheckedHandler.bind(this, {choice:choice, index:index})} choice={choice} />
+        )
+      })}
+      
+      <TouchableOpacity style={styles.next_container} onPress={this.onNextPressed}>
+        {this.state.questions.length>0?<Text style={styles.next}>Next</Text>:<Text style={styles.next}>Finish</Text>}
+        <Image source={require("../assets/arrow.png")} />
+      </TouchableOpacity>
+    </View>
+  );
+}
 }
 
 const styles = StyleSheet.create({

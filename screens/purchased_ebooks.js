@@ -32,14 +32,16 @@ export default class PurchasedEBooks extends Component {
         snapshot.docs[0].data().books.forEach(book=>{
           firebase.firestore().collection('e_books').doc(book).get()
           .then(snap=>{
-            const item ={
-              key: snap.id,
-              book_title: snap.data().book_title,
-              author: snap.data().author,
-              file: snap.data().book_file,
+            if(snap.data()){
+              const item ={
+                key: snap.id,
+                book_title: snap.data().book_title,
+                author: snap.data().author,
+                file: snap.data().book_file,
+              }
+              this.state.books.push(item)
+              this.setState({loading:false})
             }
-            this.state.books.push(item)
-            this.setState({loading:false})
           })
           .catch(err=>alert(err.message))
         })

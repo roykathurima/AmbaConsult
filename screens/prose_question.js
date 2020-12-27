@@ -8,12 +8,13 @@ import 'firebase/firestore';
 import FirebaseConfig from "../constants/api_keys"
 import AmbaIndicator from "../components/amba_indicator"
 
+let count = 0
 export default class ProseQuestion extends Component {
   constructor(props){
     super(props)
     this.state = {
       minutes: 5,
-      seconds: 30,
+      seconds: 0,
       time_timer:undefined,
       questions: [],
       // {quiz_no, exam_id, quiz_txt, quiz_type, no_of_marks, id}
@@ -21,6 +22,7 @@ export default class ProseQuestion extends Component {
         quiz_no:'', exam_id:'', quiz_txt:'', quiz_type:'', no_of_marks:'', id:''
       },
       loading: false,
+      new_quiz: false,
       answer_text: '',
       user: {user:'', id:''},
     }
@@ -28,27 +30,34 @@ export default class ProseQuestion extends Component {
   async componentDidMount(){
     const [student_name, user_id] = await AsyncStorage.multiGet(['student_name', 'user_id'])
     // alert(student_name[1] + '' + user_id[1] + '')
-    this.setState({user:{name: student_name[1], id: user_id[1]}})
-
-    const {questions} = this.props.route.params
-    console.log(questions)
-    if(questions == undefined) return
-    this.setState({current_question: questions.pop()})
+    const {questions, minutes, seconds} = this.props.route.params
+    this.setState({user:{name: student_name[1], id: user_id[1]}, minutes: minutes, seconds: seconds})
+    if(questions == undefined){
+      alert("the question is undefined")
+      return
+    }
+    const q_holder = questions.pop()
+    this.setState({current_question: q_holder})
+    alert(q_holder.quiz_txt)
     // pop mutates the array
     this.setState({questions: questions})
     console.log(this.state.current_question)
     const t = setInterval(()=>{
-      let disp_str = ""
       if(this.state.seconds == 0 && this.state.minutes == 0){
         clearInterval(this.state.time_timer)
-        // auto-navigate to the next screen
-        // this.props.navigation.navigate("boolean_question")
-        this.performNavigation()
+        // auto-navigate out of the questions when the time is up
+        this.props.navigation.navigate('exams',{finished:true})
         return
       }
       if(this.state.seconds == 0){
-        this.setState({minutes: --this.state.minutes, seconds: 60})
-        return
+        firebase.firestore().collection('exams').doc(question.exam_id).update({completed:true})
+        .then(()=>{
+          this.props.navigation.navigate('exams',{finished:true})
+          return
+        }, err=>{
+          alert(err.message)
+          return
+        })
       }
       this.setState({seconds: --this.state.seconds})
     }, 1000)
@@ -63,10 +72,23 @@ export default class ProseQuestion extends Component {
     };
 }
 
+componentDidUpdate(nextProps, nextState){
+  // The documentation for this is in the boolean question
+  if(nextState.new_quiz && count < 1){
+    count =+1
+    this.setState({new_quiz:false})
+    this.componentDidMount()
+  }
+}
   performNavigation = ()=>{
     // If there are no more questions, navigate to the exams screen
     if(this.state.questions.length<=0){
-      this.props.navigation.navigate('exams', {finished:true})
+      firebase.firestore().collection('exams').doc(this.state.current_question.exam_id).update({completed:true})
+      .then(()=>{
+        this.props.navigation.navigate('exams',{finished:true})
+      }, err=>{
+        alert(err.message)
+      })
       return
     }
     const question = this.state.questions[this.state.questions.length-1]
@@ -78,12 +100,13 @@ export default class ProseQuestion extends Component {
         choices.push(snapshot.docs[0].data().choice2)
         choices.push(snapshot.docs[0].data().choice3)
         choices.push(snapshot.docs[0].data().choice4)
-        this.props.navigation.navigate("multiple_choice_question", {questions: this.state.questions, choices: choices})
+        this.props.navigation.navigate("multiple_choice_question", {questions: this.state.questions, choices: choices, minutes:this.state.minutes, seconds: this.state.seconds})
       })
     } else if(question.quiz_type == 'boolean'){
-      this.props.navigation.navigate("boolean_question", {questions: this.state.questions})
+      this.props.navigation.navigate("boolean_question", {questions: this.state.questions, minutes:this.state.minutes, seconds: this.state.seconds})
     } else if(question.quiz_type == 'prose'){
-      this.props.navigation.navigate("prose_question", {questions: this.state.questions})
+      this.setState({new_quiz:true})
+      this.props.navigation.navigate("prose_question", {questions: this.state.questions, minutes:this.state.minutes, seconds: this.state.seconds})
     }
     // End of Handler
   }

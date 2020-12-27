@@ -8,14 +8,16 @@ import 'firebase/firestore';
 import FirebaseConfig from "../constants/api_keys"
 import AmbaIndicator from "../components/amba_indicator"
 
+let count = 0
 export default class BooleanQuestion extends Component {
   constructor(props){
     super(props);
     this.state={
       minutes: 5,
-      seconds: 30,
+      seconds: 0,
       time_timer:undefined,
       answer_value: undefined,
+      new_quiz: false,
       loading:false,
       questions: [],
       current_question: {
@@ -26,38 +28,64 @@ export default class BooleanQuestion extends Component {
   }
   async componentDidMount(){
     const [student_name, user_id] = await AsyncStorage.multiGet(['student_name', 'user_id'])
-    this.setState({user:{name: student_name[1], id: user_id[1]}})
+    const {questions, minutes, seconds} = this.props.route.params
+    this.setState({user:{name: student_name[1], id: user_id[1]}, minutes:minutes, seconds: seconds})
 
-    const {questions} = this.props.route.params
+    console.log("Total questions on component did mount...")
     console.log(questions)
-    if(questions == undefined) return
-    this.setState({current_question: questions.pop(), questions: questions})
-
+    const q_holder = questions.pop()
+    if(questions == undefined){
+      alert("the question is undefined...")
+      return
+    }
+    this.setState({current_question: q_holder, questions: questions})
     const t = setInterval(()=>{
-      let disp_str = ""
       if(this.state.seconds == 0 && this.state.minutes == 0){
         clearInterval(this.state.time_timer)
-        // auto-navigate to the next screen
-        // this.props.navigation.navigate("exams")
-        this.performNavigation()
-        return
+        // auto-navigate out of the questions once the time is up
+        firebase.firestore().collection('exams').doc(question.exam_id).update({completed:true})
+        .then(()=>{
+          this.props.navigation.navigate('exams',{finished:true})
+          return
+        }, err=>{
+          alert(err.message)
+          return
+        })
       }
       if(this.state.seconds == 0){
-        this.setState({minutes: --this.state.minutes, seconds: 60})
+        this.setState({minutes: --this.state.minutes, seconds: 59})
         return
       }
       this.setState({seconds: --this.state.seconds})
     }, 1000)
     this.setState({time_timer: t})
   }
+  componentDidUpdate(nextProps, nextState){
+    // console.log(nextState)
+    if(nextState.new_quiz && count < 1){
+      count =+1
+      alert(count)
+      // alert("we are now in a new question foo")
+      // This this to false immediately so that this code doesn't run on the next render cycle
+      this.setState({new_quiz:false})
+      this.componentDidMount()
+    }
+  }
   performNavigation = ()=>{
     // If there are no more questions, navigate to the exams screen
     if(this.state.questions.length<=0){
-      this.props.navigation.navigate('exams', {finished:true})
+      firebase.firestore().collection('exams').doc(this.state.current_question.exam_id).update({completed:true})
+      .then(()=>{
+        this.props.navigation.navigate('exams',{finished:true})
+      }, err=>{
+        alert(err.message)
+      })
       return
     }
     // this.props.navigation.navigate("prose_question")
     const question = this.state.questions[this.state.questions.length-1]
+    console.log("The questions after the pop")
+    console.log(this.state.questions)
     if(question.quiz_type == 'mc_question'){
       firebase.firestore().collection('multiple_choices').where('question_id', '==', question.id).get()
       .then(snapshot=>{
@@ -66,12 +94,13 @@ export default class BooleanQuestion extends Component {
         choices.push(snapshot.docs[0].data().choice2)
         choices.push(snapshot.docs[0].data().choice3)
         choices.push(snapshot.docs[0].data().choice4)
-        this.props.navigation.navigate("multiple_choice_question", {questions: this.state.questions, choices: choices})
+        this.props.navigation.navigate("multiple_choice_question", {questions: this.state.questions, choices: choices, minutes:this.state.minutes, seconds: this.state.seconds})
       })
     } else if(question.quiz_type == 'boolean'){
-      this.props.navigation.navigate("boolean_question", {questions: this.state.questions})
+      this.setState({new_quiz:true})
+      this.props.navigation.navigate("boolean_question", {questions: this.state.questions, minutes:this.state.minutes, seconds: this.state.seconds})
     } else if(question.quiz_type == 'prose'){
-      this.props.navigation.navigate("prose_question", {questions: this.state.questions})
+      this.props.navigation.navigate("prose_question", {questions: this.state.questions, minutes:this.state.minutes, seconds: this.state.seconds})
     }
     // End of Handler
   }
@@ -134,7 +163,7 @@ export default class BooleanQuestion extends Component {
         {`Q${this.state.current_question.quiz_no}. ${this.state.current_question.quiz_txt}`}
         </Text>
         <CheckAnswer checked={this.state.answer_value} toggleChecked={()=>this.setState({answer_value:true})} choice="True" />
-        <CheckAnswer checked={!this.state.answer_value && this.state.answer_value == undefined} toggleChecked={()=>this.setState({answer_value:false})} choice="False" />
+        <CheckAnswer checked={this.state.answer_value == false} toggleChecked={()=>this.setState({answer_value:false})} choice="False" />
         <TouchableOpacity style={styles.next_container} onPress={this.onNextPressed}>
         {this.state.questions.length>0?<Text style={styles.next}>Next</Text>:<Text style={styles.next}>Finish</Text>}
           <Image source={require("../assets/arrow.png")} />

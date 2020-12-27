@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, {Component} from "react";
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, ScrollView, Image, TouchableOpacity } from "react-native";
 import AmbaInput from "../components/amba_input";
 import GreenButton from "../components/button";
 import * as ImagePicker from 'expo-image-picker';
@@ -100,7 +100,7 @@ export default class AccountProfile extends Component {
       // Get the URL and set the state with it...
       snapshot.ref.getDownloadURL().then(url=>{
         console.log(url)
-        alert(url)
+        // alert(url)
         this.setState({fspic_url: url, pic_loading:false, img: true})
       })
       blob.close()
@@ -112,7 +112,11 @@ export default class AccountProfile extends Component {
     // No need for the check since the button is disabled in the first place
     // update the user details kwa firestore 
     // alert("Handle Save Pressed Roy...")
-    if(!img){
+    if(!this.state.can_edit){
+      alert("Press on the Edit Icon to start Editing...")
+      return;
+    }
+    if(!this.state.img){
       alert("Wait for the image to load...");
       return;
     }
@@ -162,7 +166,7 @@ export default class AccountProfile extends Component {
   }
   render(){
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <StatusBar style="auto" />
 
         <View style={styles.action_icons}>
@@ -214,10 +218,10 @@ export default class AccountProfile extends Component {
             })}
           </Picker>
         </View>
-          <GreenButton disabled={!this.state.can_edit} text="Save" onHandleClick={this.onSavePressed} />
+          <GreenButton text="Save" onHandleClick={this.onSavePressed} />
         </View>
         {this.state.loading?<AmbaIndicator />:null}
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -32,18 +32,24 @@ export default class EnrolledWorkshops extends Component {
       firebase.firestore().collection('my_workshops').where('student', '==', id).get()
       .then(snapshot=>{
         snapshot.docs[0].data().workshops.forEach(workshop=>{
+          console.log(workshop)
           firebase.firestore().collection('workshops').doc(workshop).get()
           .then(snap=>{
-            const item = {
-              key: snap.id,
-              title: snap.data().title,
-              date: snap.data().date,
-              venue: snap.data().venue,
-              description:snap.data().description,
+            console.log(snap.data())
+            // The workshop may be deleted but still appear in the enrolled array...
+            // Thus, I perform this check to avoid unneccesary error alerts
+            if(snap.data()){
+              const item = {
+                key: snap.id,
+                title: snap.data().title,
+                date: snap.data().date,
+                venue: snap.data().venue,
+                description:snap.data().description,
+              }
+              this.state.workshops.push(item)
+              this.state.cp.push(item)
+              this.setState({loading: false})
             }
-            this.state.workshops.push(item)
-            this.state.cp.push(item)
-            this.setState({loading: false})
           })
           .catch(err=>alert(err.message))
         })
@@ -159,6 +165,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginStart: 10,
     color: "#5C738B",
+    width: "66%",
   },
   main_text: {
     flexWrap: "wrap",

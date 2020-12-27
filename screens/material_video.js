@@ -36,6 +36,7 @@ export default class MaterialVideo extends Component {
     firebase.firestore().collection('course_material').where('type', "==", "video").where('course', '==', key).get()
     .then(snapshot=>{
       // alert(snapshot.docs.length)
+      // console.log(snapshot.docs)
       if(snapshot.docs.length == 0){
         alert("No Materials associated with this Course Exist")
         setTimeout(()=>{this.props.navigation.goBack(null)}, 1000)
