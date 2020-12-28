@@ -78,12 +78,14 @@ export default class MultipleChoiceQuestion extends Component {
   }
   performNavigation = ()=>{
     // If there are no more questions, navigate to the exams screen
-    alert(this.state.questions.length)
+    // alert(this.state.questions.length)
     if(this.state.questions.length<=0){
       firebase.firestore().collection('exams').doc(this.state.current_question.exam_id).update({completed:true})
       .then(()=>{
-        this.props.navigation.navigate('exams',{finished:true})
+        clearInterval(this.state.time_timer)
+        this.props.navigation.navigate('exams',{finished:true, exam_id:this.state.current_question.exam_id})
       }, err=>{
+        clearInterval(this.state.time_timer)
         alert(err.message)
       })
       return

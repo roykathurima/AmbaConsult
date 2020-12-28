@@ -25,6 +25,7 @@ export default class MaterialVideo extends Component {
       videos: [],
       cp: [],
       playing_video: {},
+      no_video: false,
     }
     if(!firebase.apps.length){
       firebase.initializeApp(FirebaseConfig);
@@ -38,8 +39,17 @@ export default class MaterialVideo extends Component {
       // alert(snapshot.docs.length)
       // console.log(snapshot.docs)
       if(snapshot.docs.length == 0){
-        alert("No Materials associated with this Course Exist")
-        setTimeout(()=>{this.props.navigation.goBack(null)}, 1000)
+        alert("No Video Materials associated with this Course Exist")
+        firebase.firestore().collection('course_material').where('type', '==', 'handout').where('course', '==', key).get()
+        .then(snap=>{
+          // alert(snap.docs.length)
+          if(snap.docs.length > 0){
+            // navigate to the handouts
+            this.props.navigation.navigate('material_handouts')
+          } else{
+            this.props.navigation.goBack(null)
+          }
+        })
         return
       }
       snapshot.forEach(obj=>{

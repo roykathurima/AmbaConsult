@@ -64,7 +64,7 @@ export default class BooleanQuestion extends Component {
     // console.log(nextState)
     if(nextState.new_quiz && count < 1){
       count =+1
-      alert(count)
+      // alert(count)
       // alert("we are now in a new question foo")
       // This this to false immediately so that this code doesn't run on the next render cycle
       this.setState({new_quiz:false})
@@ -76,8 +76,10 @@ export default class BooleanQuestion extends Component {
     if(this.state.questions.length<=0){
       firebase.firestore().collection('exams').doc(this.state.current_question.exam_id).update({completed:true})
       .then(()=>{
-        this.props.navigation.navigate('exams',{finished:true})
+        clearInterval(this.state.time_timer)
+        this.props.navigation.navigate('exams',{finished:true, exam_id:this.state.current_question.exam_id})
       }, err=>{
+        clearInterval(this.state.time_timer)
         alert(err.message)
       })
       return

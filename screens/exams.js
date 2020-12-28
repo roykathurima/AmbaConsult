@@ -24,6 +24,14 @@ export default class Exams extends Component {
     console.log("component updated...")
     // Consider passing the ID of the exam that was completed and have the this lifecycle method loop
     // through the state and then change the state of the button when the user is through...
+    if(this.props.route.params){
+      const {finished, exam_id} = this.props.route.params
+      // probably check if the old exam ID is not the present one
+      // so as not to perform this calculation more than once for a given exam...
+      if(finished){
+        (this.state.exams.filter((e, i, a)=>e.key == exam_id))[0].completed = true
+      }
+    }
     // The alternative would be to observe the data but that would change the structure of the code in a major way
   }
   async componentDidMount(){
@@ -31,11 +39,12 @@ export default class Exams extends Component {
     this.setState({loading:true})
     const user_id = await AsyncStorage.getItem('user_id')
     this.setState({student_id: user_id})
-    alert(this.state.student_id)
+    // alert(this.state.student_id)
     firebase.firestore().collection('my_courses').where("student","==", this.state.student_id).get()
     .then(shot=>{
       if(shot.docs.length<=0){
         alert("You do not have any exams at the moment")
+        setTimeout(()=>{this.props.navigation.goBack(null)}, 1000)
         return
       }
       shot.docs[0].data().courses.forEach(course=>{
@@ -112,8 +121,8 @@ export default class Exams extends Component {
       let total_score = 0
       let total_marks = 0
       snap.forEach(item=>{
-        total_score += item.data().assigned_mark
-        total_marks += item.data().possible_mark
+        total_score += parseInt(item.data().assigned_mark)
+        total_marks += parseInt(item.data().possible_mark)
       })
       Alert.alert("Your Score", `${total_score} / ${total_marks}`, [{text:"Ok"}], {cancelable:false})
     })

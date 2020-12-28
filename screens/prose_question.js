@@ -38,7 +38,7 @@ export default class ProseQuestion extends Component {
     }
     const q_holder = questions.pop()
     this.setState({current_question: q_holder})
-    alert(q_holder.quiz_txt)
+    // alert(q_holder.quiz_txt)
     // pop mutates the array
     this.setState({questions: questions})
     console.log(this.state.current_question)
@@ -85,8 +85,10 @@ componentDidUpdate(nextProps, nextState){
     if(this.state.questions.length<=0){
       firebase.firestore().collection('exams').doc(this.state.current_question.exam_id).update({completed:true})
       .then(()=>{
-        this.props.navigation.navigate('exams',{finished:true})
+        clearInterval(this.state.time_timer)
+        this.props.navigation.navigate('exams',{finished:true, exam_id:this.state.current_question.exam_id})
       }, err=>{
+        clearInterval(this.state.time_timer)
         alert(err.message)
       })
       return
